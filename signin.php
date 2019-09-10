@@ -9,15 +9,15 @@ if (isset($_COOKIE['user_login'])) {
 
 if (isset($_POST['login'])) {
 		if (isset($_POST['user_login']) && isset($_POST['password_login'])) {
-			$user_login = mysql_real_escape_string($_POST['user_login']);
+			$user_login = mysqli_real_escape_string($_POST['user_login']);
 			$user_login = mb_convert_case($user_login, MB_CASE_LOWER, "UTF-8");	
-			$password_login = mysql_real_escape_string($_POST['password_login']);
+			$password_login = mysqli_real_escape_string($_POST['password_login']);
 			$rememberme = $_POST['rememberme'];		
 			$num = 0;
 			$password_login_md5 = md5($password_login);
-			$result = mysql_query("SELECT * FROM users WHERE (username='$user_login' || email='$user_login') AND password='$password_login_md5' AND activated='1' AND blocked_user='0'");
-			$num = mysql_num_rows($result);
-			$get_user_email = mysql_fetch_assoc($result);
+			$result = mysqli_query("SELECT * FROM users WHERE (username='$user_login' || email='$user_login') AND password='$password_login_md5' AND activated='1' AND blocked_user='0'");
+			$num = mysqli_num_rows($result);
+			$get_user_email = mysqli_fetch_assoc($result);
 				$get_user_uname_db = $get_user_email['username'];
 			if ($num>0) {
 				$_SESSION['user_login'] = $get_user_uname_db;
@@ -28,9 +28,9 @@ if (isset($_POST['login'])) {
 				exit();
 			}
 			else {
-				$result1 = mysql_query("SELECT * FROM users WHERE (username='$user_login' || email='$user_login') AND password='$password_login_md5' AND activated ='0'");
-				$num1 = mysql_num_rows($result1);
-				$get_user_email = mysql_fetch_assoc($result1);
+				$result1 = mysqli_query("SELECT * FROM users WHERE (username='$user_login' || email='$user_login') AND password='$password_login_md5' AND activated ='0'");
+				$num1 = mysqli_num_rows($result1);
+				$get_user_email = mysqli_fetch_assoc($result1);
 				$get_user_name_db = $get_user_email['username'];
 				$get_user_email_db = $get_user_email['email'];
 				$get_user_confrmCode_db = $get_user_email['confirmCode'];
@@ -51,8 +51,8 @@ if (isset($_POST['login'])) {
 						';
 						//header('location: signin.php');
 				}else {
-					$result1 = mysql_query("SELECT * FROM users WHERE (username='$user_login' || email='$user_login') AND password='$password_login_md5' AND blocked_user='1'");
-					$num1 = mysql_num_rows($result1);
+					$result1 = mysqli_query("SELECT * FROM users WHERE (username='$user_login' || email='$user_login') AND password='$password_login_md5' AND blocked_user='1'");
+					$num1 = mysqli_num_rows($result1);
 					if ($num1>=1) {
 						$success_message = '
 						<h2><font face="bookman">Opps!!!</font></h2>
@@ -75,13 +75,13 @@ if (isset($_POST['login'])) {
 	}
 
 if (isset($_POST['submconfrmCode'])) {
-	$user_confrmCode_db = mysql_real_escape_string($_POST['confrmCode']);
+	$user_confrmCode_db = mysqli_real_escape_string($_POST['confrmCode']);
 	$user_loginnn = $_SESSION['user_loginn'];
-	$result2 = mysql_query("SELECT * FROM users WHERE username='$user_loginnn' AND confirmCode='$user_confrmCode_db' AND activated='0'");
-	$num2 = mysql_num_rows($result2);
-	$get_user_info_f = mysql_fetch_assoc($result2);
+	$result2 = mysqli_query("SELECT * FROM users WHERE username='$user_loginnn' AND confirmCode='$user_confrmCode_db' AND activated='0'");
+	$num2 = mysqli_num_rows($result2);
+	$get_user_info_f = mysqli_fetch_assoc($result2);
 	if ($num2>=1) {
-		$password_update_query = mysql_query("UPDATE users SET activated='1', confirmCode='0' WHERE username='$user_loginnn'");
+		$password_update_query = mysqli_query("UPDATE users SET activated='1', confirmCode='0' WHERE username='$user_loginnn'");
 		
 		//creating session
 		$_SESSION['user_login'] = $user_loginnn;
@@ -110,8 +110,8 @@ if (isset($_POST['submconfrmCode'])) {
 <?php
 if(isset($_POST["name2check"]) && $_POST["name2check"] != ""){
     $username = preg_replace('#[^a-z0-9]#i', '', $_POST['name2check']); 
-    $sql_uname_check = mysql_query("SELECT id FROM users WHERE username='$username' LIMIT 1"); 
-    $uname_check = mysql_num_rows($sql_uname_check);
+    $sql_uname_check = mysqli_query("SELECT id FROM users WHERE username='$username' LIMIT 1"); 
+    $uname_check = mysqli_num_rows($sql_uname_check);
     if (strlen($username) < 5 || strlen($username) > 15 ) {
 	    echo '<p style="color: #C10000; font-size: 13px; font-weight: 600; text-align: center; margin: 3px 0;">5 - 15 characters please</p>';
 	    exit();
@@ -179,11 +179,11 @@ $_POST['username'] = preg_replace('/\s+/','',$_POST['username']);
 		}
 
 		//username check
-		$u_check = mysql_query("SELECT username FROM users WHERE username='$u_name'");
-		$check = mysql_num_rows($u_check);
+		$u_check = mysqli_query("SELECT username FROM users WHERE username='$u_name'");
+		$check = mysqli_num_rows($u_check);
 		// Check if email already exists
-		$e_check = mysql_query("SELECT email FROM users WHERE email='$u_email'");
-		$email_check = mysql_num_rows($e_check);
+		$e_check = mysqli_query("SELECT email FROM users WHERE email='$u_email'");
+		$email_check = mysqli_num_rows($e_check);
 		if (strlen($_POST['username']) >4 && strlen($_POST['username']) <16 ) {
 			if ($check == 0 ) {
 				if ($email_check == 0) {
@@ -205,19 +205,19 @@ $_POST['username'] = preg_replace('/\s+/','',$_POST['username']);
 						";
 						//if (@mail($_POST['email'],"Daowat Activation Code",$msg, "From:Daowat <no-reply@daowat.com>")) {
 							
-						$result = mysql_query("INSERT INTO users (first_name,username,email,password,gender,sign_up_date,activated) VALUES ('$_POST[first_name]','$_POST[username]','$_POST[email]','$_POST[password]','$_POST[gender]','$d','1')");
+						$result = mysqli_query("INSERT INTO users (first_name,username,email,password,gender,sign_up_date,activated) VALUES ('$_POST[first_name]','$_POST[username]','$_POST[email]','$_POST[password]','$_POST[gender]','$d','1')");
 						$_SESSION['user_loginn'] = $_POST['username'];
 						
 						//sent follow
 						//$user_from = $_POST['username'];
 						//$user_to = 'nur';
-						//$create_followMe = mysql_query("INSERT INTO follow VALUES ('', '$user_from', '$user_to', NOW(), 'no')");
-						//$create_followFrom = mysql_query("INSERT INTO follow VALUES ('', '$user_to', '$user_from', NOW(), 'no')");
+						//$create_followMe = mysqli_query("INSERT INTO follow VALUES ('', '$user_from', '$user_to', NOW(), 'no')");
+						//$create_followFrom = mysqli_query("INSERT INTO follow VALUES ('', '$user_to', '$user_from', NOW(), 'no')");
 						//send message
 						//$msg_body = 'Assalamu Alaikum';
 						//$msgdate = date("Y-m-d");
 						//$opened = "no";
-						//$messages = mysql_query("INSERT INTO pvt_messages VALUES ('','$user_to','$user_from','$msg_body','$msgdate','NOW()','$opened', '')");
+						//$messages = mysqli_query("INSERT INTO pvt_messages VALUES ('','$user_to','$user_from','$msg_body','$msgdate','NOW()','$opened', '')");
 						
 						//success message
 						$success_message = '
@@ -252,8 +252,8 @@ $_POST['username'] = preg_replace('/\s+/','',$_POST['username']);
 }
 
 //getting daowat post photo
-$getposts = mysql_query("SELECT * FROM daowat WHERE photos != '' ORDER BY  RAND() ");
-$row = mysql_fetch_assoc($getposts);
+$getposts = mysqli_query("SELECT * FROM daowat WHERE photos != '' ORDER BY  RAND() ");
+$row = mysqli_fetch_assoc($getposts);
 $photos_db = $row['photos'];
 $photosrow = "./userdata/daowat_pics/".$photos_db;
 

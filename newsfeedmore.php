@@ -16,23 +16,23 @@ else {
  }
  if ($newsfeedlastid >= 1) {
 		//timeline query table
-		$getposts = mysql_query("SELECT * FROM posts WHERE newsfeedshow ='1' AND report ='0' AND note='0' AND daowat_give='0' AND id < $newsfeedlastid ORDER BY id DESC") or die(mysql_error());
-		if (mysql_num_rows($getposts)) {
+		$getposts = mysqli_query("SELECT * FROM posts WHERE newsfeedshow ='1' AND report ='0' AND note='0' AND daowat_give='0' AND id < $newsfeedlastid ORDER BY id DESC") or die(mysqli_error());
+		if (mysqli_num_rows($getposts)) {
 		
 		//declear variable
 		$getpostsNum= 0;
-			while ($row = mysql_fetch_assoc($getposts)) {
+			while ($row = mysqli_fetch_assoc($getposts)) {
 				$added_by = $row['added_by'];
 				if ($added_by == $user) {
 					include ( "./inc/newsfeed.inc.php");
 					$getpostsNum++;
 				}else {
-					$checkDeactiveUser= mysql_query("SELECT * FROM users WHERE username = '$added_by'") or die(mysql_error());
-					$checkDeactiveUser_row = mysql_fetch_assoc($checkDeactiveUser);
+					$checkDeactiveUser= mysqli_query("SELECT * FROM users WHERE username = '$added_by'") or die(mysqli_error());
+					$checkDeactiveUser_row = mysqli_fetch_assoc($checkDeactiveUser);
 					$activeOrNot = $checkDeactiveUser_row ['activated'];
 					if ($activeOrNot != '0') {
-						$check_if_follow = mysql_query("SELECT * FROM follow WHERE (user_from='$user' AND user_to='$added_by ') ORDER BY id DESC LIMIT 2");
-						$num_follow_found = mysql_num_rows($check_if_follow);
+						$check_if_follow = mysqli_query("SELECT * FROM follow WHERE (user_from='$user' AND user_to='$added_by ') ORDER BY id DESC LIMIT 2");
+						$num_follow_found = mysqli_num_rows($check_if_follow);
 						if ($num_follow_found != "") {
 							include ( "./inc/newsfeed.inc.php");
 							$getpostsNum++;

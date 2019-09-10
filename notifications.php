@@ -11,12 +11,12 @@ else {
 
 $username ="";
 if (isset($_GET['u'])) {
-	$username = mysql_real_escape_string($_GET['u']);
+	$username = mysqli_real_escape_string($_GET['u']);
 	if (ctype_alnum($username)) {
 		//check user exists
-		$check = mysql_query("SELECT username, first_name FROM users WHERE username='$username'");
-		if (mysql_num_rows($check)===1) {
-			$get = mysql_fetch_assoc($check);
+		$check = mysqli_query("SELECT username, first_name FROM users WHERE username='$username'");
+		if (mysqli_num_rows($check)===1) {
+			$get = mysqli_fetch_assoc($check);
 			$username = $get['username'];
 		}
 		else {
@@ -26,13 +26,13 @@ if (isset($_GET['u'])) {
 }
 
 //Check whether the user has uploaded a cover pic or not
-$check_pic = mysql_query("SELECT cover_pic FROM users WHERE username='$user'");
-$get_pic_row = mysql_fetch_assoc($check_pic);
+$check_pic = mysqli_query("SELECT cover_pic FROM users WHERE username='$user'");
+$get_pic_row = mysqli_fetch_assoc($check_pic);
 $cover_pic_db = $get_pic_row['cover_pic'];
 //check for userfrom propic delete
-						$pro_changed = mysql_query("SELECT * FROM posts WHERE added_by='$user' AND (discription='updated his cover photo.' OR discription='updated her cover photo.') ORDER BY id DESC LIMIT 1");
-						$get_pro_changed = mysql_fetch_assoc($pro_changed);
-		$pro_num = mysql_num_rows($pro_changed);
+						$pro_changed = mysqli_query("SELECT * FROM posts WHERE added_by='$user' AND (discription='updated his cover photo.' OR discription='updated her cover photo.') ORDER BY id DESC LIMIT 1");
+						$get_pro_changed = mysqli_fetch_assoc($pro_changed);
+		$pro_num = mysqli_num_rows($pro_changed);
 		if ($pro_num == 0) {
 			$cover_pic= "img/default_covpic.png";
 		}else {
@@ -46,8 +46,8 @@ $cover_pic_db = $get_pic_row['cover_pic'];
 
 
 //name query
-$about_query = mysql_query("SELECT first_name FROM users WHERE username='$user'");
-$get_result = mysql_fetch_assoc($about_query);
+$about_query = mysqli_query("SELECT first_name FROM users WHERE username='$user'");
+$get_result = mysqli_fetch_assoc($about_query);
 $first_name_user = $get_result['first_name'];
 
 
@@ -122,29 +122,29 @@ $first_name_user = $get_result['first_name'];
 				 			<li style='line-height: 8px;'>
 				 				<?php 
 				 					//getting post comment
-									$get_notipost = mysql_query("SELECT * FROM post_comments WHERE posted_to='$user' AND posted_by != '$user' ORDER BY id DESC LIMIT 50");
-									$count_notipost = mysql_num_rows($get_notipost);
+									$get_notipost = mysqli_query("SELECT * FROM post_comments WHERE posted_to='$user' AND posted_by != '$user' ORDER BY id DESC LIMIT 50");
+									$count_notipost = mysqli_num_rows($get_notipost);
 				 					//getting daowat comment
-									$get_notidwt = mysql_query("SELECT * FROM daowat_comments WHERE daowat_to='$user' AND daowat_by != '$user' ORDER BY id DESC LIMIT 50");
-									$count_notidwt = mysql_num_rows($get_notidwt);
+									$get_notidwt = mysqli_query("SELECT * FROM daowat_comments WHERE daowat_to='$user' AND daowat_by != '$user' ORDER BY id DESC LIMIT 50");
+									$count_notidwt = mysqli_num_rows($get_notidwt);
 									$count = $count_notidwt + $get_notidwt;
 									if ($count != 0) {
 										//getting daowat noti
-										while ($noti_dwt = mysql_fetch_assoc($get_notidwt)) {
+										while ($noti_dwt = mysqli_fetch_assoc($get_notidwt)) {
 											$daowat_id = $noti_dwt['daowat_id'];
 											$daowat_body = $noti_dwt['daowat_body'];
 											$time = $noti_dwt['time'];
 											$user_by = $noti_dwt['daowat_by'];
 											$user_to = $noti_dwt['daowat_to'];
-											$get_user_info = mysql_query("SELECT * FROM users WHERE username='$user_by'");
-											$get_info = mysql_fetch_assoc($get_user_info);
+											$get_user_info = mysqli_query("SELECT * FROM users WHERE username='$user_by'");
+											$get_info = mysqli_fetch_assoc($get_user_info);
 											$profile_pic_db= $get_info['profile_pic'];
 											$posted_by = $get_info['first_name'];
 											
 											//check for propic delete
-						$pro_changed = mysql_query("SELECT * FROM posts WHERE added_by='$user_by' AND (discription='changed his profile picture.' OR discription='changed her profile picture.') ORDER BY id DESC LIMIT 1");
-						$get_pro_changed = mysql_fetch_assoc($pro_changed);
-		$pro_num = mysql_num_rows($pro_changed);
+						$pro_changed = mysqli_query("SELECT * FROM posts WHERE added_by='$user_by' AND (discription='changed his profile picture.' OR discription='changed her profile picture.') ORDER BY id DESC LIMIT 1");
+						$get_pro_changed = mysqli_fetch_assoc($pro_changed);
+		$pro_num = mysqli_num_rows($pro_changed);
 		if ($pro_num == 0) {
 			$profile_pic = "img/default_propic.png";
 		}else {
@@ -156,8 +156,8 @@ $first_name_user = $get_result['first_name'];
 		}
 		}
 											
-											$get_descrip = mysql_query("SELECT * FROM daowat WHERE id='$daowat_id'");
-											$get_description = mysql_fetch_assoc($get_descrip);
+											$get_descrip = mysqli_query("SELECT * FROM daowat WHERE id='$daowat_id'");
+											$get_description = mysqli_fetch_assoc($get_descrip);
 											$discription = $get_description['photos'];
 											if ($discription == "") {
 												$comment_disp = "commented on your daowat";

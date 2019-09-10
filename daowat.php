@@ -15,12 +15,12 @@ else {
 	$username ="";
 	$firstname ="";
 	if (isset($_GET['u'])) {
-		$username = mysql_real_escape_string($_GET['u']);
+		$username = mysqli_real_escape_string($_GET['u']);
 		if (ctype_alnum($username)) {
 			//check user exists
-			$check = mysql_query("SELECT username, first_name FROM users WHERE username='$username'");
-			if (mysql_num_rows($check)===1) {
-				$get = mysql_fetch_assoc($check);
+			$check = mysqli_query("SELECT username, first_name FROM users WHERE username='$username'");
+			if (mysqli_num_rows($check)===1) {
+				$get = mysqli_fetch_assoc($check);
 				$username = $get['username'];
 			}
 			else {
@@ -29,8 +29,8 @@ else {
 		}
 	}
 
-	$get_title_info = mysql_query("SELECT * FROM users WHERE username='$username'");
-	$get_title_fname = mysql_fetch_assoc($get_title_info);
+	$get_title_info = mysqli_query("SELECT * FROM users WHERE username='$username'");
+	$get_title_fname = mysqli_fetch_assoc($get_title_info);
 	$title_fname = $get_title_fname['first_name'];
 
 ?>
@@ -66,8 +66,8 @@ else {
 <body>
 
 <?php 
-$result = mysql_query("SELECT * FROM users WHERE username='$username'");
-$num = mysql_num_rows($result);
+$result = mysqli_query("SELECT * FROM users WHERE username='$username'");
+$num = mysqli_num_rows($result);
 	if ($num == 1) {
 		include ( "./inc/header.inc.php");
 	    	include ( "./inc/profile.inc.php");
@@ -99,7 +99,7 @@ $num = mysql_num_rows($result);
 		//$daowat = ($_POST['daowat']);
 		$daowat = isset($_POST['daowat']) ? $_POST['daowat'] : '';
 		$daowat =  trim($daowat);
-		$daowat = mysql_real_escape_string($daowat);
+		$daowat = mysqli_real_escape_string($daowat);
 		$pic = @$_FILES['uploadFile'];
 		if ($pic != "") {
 			if (isset($_FILES['uploadFile'])) {
@@ -130,7 +130,7 @@ $num = mysql_num_rows($result);
 					$photos = "$chare/$filename";
 					$user_posted_to = $user;
 					$sqlCommand = "INSERT INTO posts(daowat_body,date_added,added_by,user_posted_to,photos,daowat_give) VALUES('$daowat', '$date_added','$added_by', '$user_posted_to','$photos','1')";
-					$query = mysql_query($sqlCommand) or die (mysql_error());
+					$query = mysqli_query($sqlCommand) or die (mysqli_error());
 					header("Location: daowat.php?u=$username");
 					}
 				}else if ($daowat != "") {
@@ -138,7 +138,7 @@ $num = mysql_num_rows($result);
 					$added_by = $user;
 					$user_posted_to = $user;
 					$sqlCommand = "INSERT INTO posts(daowat_body,date_added,added_by,user_posted_to,daowat_give) VALUES('$daowat', '$date_added','$added_by', '$user_posted_to','1')";
-					$query = mysql_query($sqlCommand) or die (mysql_error());
+					$query = mysqli_query($sqlCommand) or die (mysqli_error());
 					header("Location: daowat.php?u=$username");
 				}
 				else if ($daowat == "") {
@@ -178,10 +178,10 @@ $num = mysql_num_rows($result);
 					<div class="profilePosts">
 					<?php
 					//for getting post
-					$getposts = mysql_query("SELECT * FROM posts WHERE added_by ='$username' AND (daowat_body !='' || daowat_post != '0') ORDER BY id DESC LIMIT 5 ") or die(mysql_error());
-					$count_post = mysql_num_rows($getposts);
+					$getposts = mysqli_query("SELECT * FROM posts WHERE added_by ='$username' AND (daowat_body !='' || daowat_post != '0') ORDER BY id DESC LIMIT 5 ") or die(mysqli_error());
+					$count_post = mysqli_num_rows($getposts);
 					echo '<ul id="daowathmpost">';
-						while ($row = mysql_fetch_assoc($getposts)) {
+						while ($row = mysqli_fetch_assoc($getposts)) {
 								include ( "./inc/newsfeed.inc.php");
 								$daowathmlastid = $row['id'];
 							}

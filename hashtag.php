@@ -42,8 +42,8 @@ else {
 		// $tag is now sanitized and ready for database queries here
 		$fulltag = "#".$tag;
 		$query = "SELECT id,body,date_added,added_by,photos,user_posted_to,discription FROM posts where body like '%$fulltag%' ORDER BY id DESC";
-		$query = mysql_query($query) or die ("could not count");
-		$count = mysql_num_rows($query);
+		$query = mysqli_query($query) or die ("could not count");
+		$count = mysqli_num_rows($query);
 		if ($count == 0){
 			echo '<div class="search_banner">No match found!
 			</div>';
@@ -54,7 +54,7 @@ else {
 			</div>
 			<div class="search_result_container">
 				';
-			while ($row=mysql_fetch_array($query)) {
+			while ($row=mysqli_fetch_array($query)) {
 					include ( "./inc/getProfilepost.inc.php" );
 				}
 			}

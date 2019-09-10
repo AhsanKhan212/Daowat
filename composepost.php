@@ -15,13 +15,13 @@ $photoLocat = 'http://www.daowat.com';
 ?>
 <?php 
 //Check whether the user has uploaded a profile pic or not
-$check_pic = mysql_query("SELECT profile_pic FROM users WHERE username='$user'");
-$get_pic_row = mysql_fetch_assoc($check_pic);
+$check_pic = mysqli_query("SELECT profile_pic FROM users WHERE username='$user'");
+$get_pic_row = mysqli_fetch_assoc($check_pic);
 $profile_pic_db = $get_pic_row['profile_pic'];
 //check for userfrom propic delete
-						$pro_changed = mysql_query("SELECT * FROM posts WHERE added_by='$user' AND (discription='changed his profile picture.' OR discription='changed her profile picture.') ORDER BY id DESC LIMIT 1");
-						$get_pro_changed = mysql_fetch_assoc($pro_changed);
-		$pro_num = mysql_num_rows($pro_changed);
+						$pro_changed = mysqli_query("SELECT * FROM posts WHERE added_by='$user' AND (discription='changed his profile picture.' OR discription='changed her profile picture.') ORDER BY id DESC LIMIT 1");
+						$get_pro_changed = mysqli_fetch_assoc($pro_changed);
+		$pro_num = mysqli_num_rows($pro_changed);
 		if ($pro_num == 0) {
 			$profile_pic= $photoLocat."/img/default_propic.png";
 		}else {
@@ -39,7 +39,7 @@ $profile_pic_db = $get_pic_row['profile_pic'];
 	//daowat update and file check
 	$error = "";
 	$post= htmlspecialchars(@$_POST['post'], ENT_QUOTES);
-	$daowat = mysql_real_escape_string($post);
+	$daowat = mysqli_real_escape_string($post);
 	$pic = @$_FILES['uploadFile'];
 	if ($pic != "") {
 		if (isset($_FILES['uploadFile'])) {
@@ -69,7 +69,7 @@ $profile_pic_db = $get_pic_row['profile_pic'];
 				$added_by = $user;
 				$photos = "$chare/$filename";
 				$sqlCommand = "INSERT INTO posts(body,date_added,added_by,user_posted_to,photos) VALUES('$post', '$date_added','$added_by', '$user_posted_to', '$photos')";
-				$query = mysql_query($sqlCommand) or die (mysql_error());
+				$query = mysqli_query($sqlCommand) or die (mysqli_error());
 				header("Location: newsfeed.php");
 				}
 			}else if ($daowat != "") {
@@ -77,7 +77,7 @@ $profile_pic_db = $get_pic_row['profile_pic'];
 				$date_added = date("Y-m-d");
 				$added_by = $user;
 				$sqlCommand = "INSERT INTO posts(body,date_added,added_by,user_posted_to) VALUES('$post', '$date_added', '$added_by', '$user_posted_to')";
-				$query = mysql_query($sqlCommand) or die (mysql_error());
+				$query = mysqli_query($sqlCommand) or die (mysqli_error());
 				header("Location: newsfeed.php");
 			}
 			else {

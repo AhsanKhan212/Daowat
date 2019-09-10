@@ -13,7 +13,7 @@ if (isset($_REQUEST['pid'])) {
 	$id = $_REQUEST['pid'];
 
 	//reporting post
-	$result = mysql_query("UPDATE posts SET report='1' WHERE id='$id'");
+	$result = mysqli_query("UPDATE posts SET report='1' WHERE id='$id'");
 	header("location: newsfeed.php");
 }else {
 	header('location: index.php');

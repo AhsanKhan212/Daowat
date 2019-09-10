@@ -11,16 +11,16 @@ else {
 
 if (isset($_REQUEST['msgid'])) {
 	$id = $_REQUEST['msgid'];
-	$id = mysql_real_escape_string($id);
+	$id = mysqli_real_escape_string($id);
 
 	//getting u name
-	$u_name_query = mysql_query("SELECT * FROM pvt_messages WHERE id='$id'");
-	$getuname = mysql_fetch_assoc($u_name_query);
+	$u_name_query = mysqli_query("SELECT * FROM pvt_messages WHERE id='$id'");
+	$getuname = mysqli_fetch_assoc($u_name_query);
 	$user_to = $getuname['user_to'];
 	$user_from = $getuname['user_from'];
 	//deleting msg
 	if(($user_to == $user) || ($user_from == $user)) {
-	$result = mysql_query("DELETE FROM pvt_messages WHERE id='$id'");
+	$result = mysqli_query("DELETE FROM pvt_messages WHERE id='$id'");
 	} else {
 	
 	}

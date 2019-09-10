@@ -11,8 +11,8 @@ else {
 ?>
 <?php  
 //getting user info
-$check_user = mysql_query("SELECT * FROM users WHERE username='$user'");
-$get_check_user_row = mysql_fetch_assoc($check_user );
+$check_user = mysqli_query("SELECT * FROM users WHERE username='$user'");
+$get_check_user_row = mysqli_fetch_assoc($check_user );
 $gender_user_db = $get_check_user_row ['gender'];
 ?>
 
@@ -39,13 +39,13 @@ if ($user) {
 $error= "";
 
 //Check whether the user has uploaded a cover pic or not
-$check_pic = mysql_query("SELECT cover_pic FROM users WHERE username='$user'");
-$get_pic_row = mysql_fetch_assoc($check_pic);
+$check_pic = mysqli_query("SELECT cover_pic FROM users WHERE username='$user'");
+$get_pic_row = mysqli_fetch_assoc($check_pic);
 $cover_pic_db = $get_pic_row['cover_pic'];
 //check for cover delete
-						$pro_changed = mysql_query("SELECT * FROM posts WHERE added_by='$user' AND (discription='updated his cover photo.' OR discription='updated her cover photo.') ORDER BY id DESC LIMIT 1");
-						$get_pro_changed = mysql_fetch_assoc($pro_changed);
-		$pro_num = mysql_num_rows($pro_changed);
+						$pro_changed = mysqli_query("SELECT * FROM posts WHERE added_by='$user' AND (discription='updated his cover photo.' OR discription='updated her cover photo.') ORDER BY id DESC LIMIT 1");
+						$get_pro_changed = mysqli_fetch_assoc($pro_changed);
+		$pro_num = mysqli_num_rows($pro_changed);
 		if ($pro_num == 0) {
 			$cover_pic= "img/default_covpic.png";
 		}else {
@@ -95,8 +95,8 @@ if (isset($_POST['uploadcov'])) {
 			
 			$photos = "$chare/$filename";
 			$sqlCommand = "INSERT INTO posts(date_added,added_by,user_posted_to,discription,photos,newsfeedshow) VALUES('$date_added','$added_by', '$user_posted_to','$discription', '$photos','1')";
-			$query = mysql_query($sqlCommand) or die (mysql_error());
-			$cover_pic_query = mysql_query("UPDATE users SET cover_pic='$chare/$filename' WHERE username='$user' ");
+			$query = mysqli_query($sqlCommand) or die (mysqli_error());
+			$cover_pic_query = mysqli_query("UPDATE users SET cover_pic='$chare/$filename' WHERE username='$user' ");
 			header("Location: profile.php?u=$user");
 		}
 	}
@@ -109,13 +109,13 @@ if (isset($_POST['uploadcov'])) {
 
 
 //Check whether the user has uploaded a profile pic or not
-$check_pic = mysql_query("SELECT profile_pic FROM users WHERE username='$user'");
-$get_pic_row = mysql_fetch_assoc($check_pic);
+$check_pic = mysqli_query("SELECT profile_pic FROM users WHERE username='$user'");
+$get_pic_row = mysqli_fetch_assoc($check_pic);
 $profile_pic_db = $get_pic_row['profile_pic'];
 						//check for propic delete
-						$pro_changed = mysql_query("SELECT * FROM posts WHERE added_by='$user' AND (discription='changed his profile picture.' OR discription='changed her profile picture.') ORDER BY id DESC LIMIT 1");
-						$get_pro_changed = mysql_fetch_assoc($pro_changed);
-		$pro_num = mysql_num_rows($pro_changed);
+						$pro_changed = mysqli_query("SELECT * FROM posts WHERE added_by='$user' AND (discription='changed his profile picture.' OR discription='changed her profile picture.') ORDER BY id DESC LIMIT 1");
+						$get_pro_changed = mysqli_fetch_assoc($pro_changed);
+		$pro_num = mysqli_num_rows($pro_changed);
 		if ($pro_num == 0) {
 			$profile_pic = "img/default_propic.png";
 		}else {
@@ -164,8 +164,8 @@ if (isset($_POST['uploadpro'])) {
 			
 			$photos = "$chare/$filename";
 			$sqlCommand = "INSERT INTO posts(date_added,added_by,user_posted_to,discription,photos,newsfeedshow) VALUES('$date_added','$added_by', '$user_posted_to','$discription', '$photos','1')";
-			$query = mysql_query($sqlCommand) or die (mysql_error());
-			$profile_pic_query = mysql_query("UPDATE users SET profile_pic='$chare/$filename' WHERE username='$user' ");
+			$query = mysqli_query($sqlCommand) or die (mysqli_error());
+			$profile_pic_query = mysqli_query("UPDATE users SET profile_pic='$chare/$filename' WHERE username='$user' ");
 			header("Location: profile.php?u=$user");
 		}
 	}

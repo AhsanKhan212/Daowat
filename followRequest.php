@@ -11,13 +11,13 @@ else {
 
 
 //Check whether the user has uploaded a cover pic or not
-$check_pic = mysql_query("SELECT cover_pic FROM users WHERE username='$user'");
-$get_pic_row = mysql_fetch_assoc($check_pic);
+$check_pic = mysqli_query("SELECT cover_pic FROM users WHERE username='$user'");
+$get_pic_row = mysqli_fetch_assoc($check_pic);
 $cover_pic_db = $get_pic_row['cover_pic'];
 //check for userfrom propic delete
-						$pro_changed = mysql_query("SELECT * FROM posts WHERE added_by='$user' AND (discription='updated his cover photo.' OR discription='updated her cover photo.') ORDER BY id DESC LIMIT 1");
-						$get_pro_changed = mysql_fetch_assoc($pro_changed);
-		$pro_num = mysql_num_rows($pro_changed);
+						$pro_changed = mysqli_query("SELECT * FROM posts WHERE added_by='$user' AND (discription='updated his cover photo.' OR discription='updated her cover photo.') ORDER BY id DESC LIMIT 1");
+						$get_pro_changed = mysqli_fetch_assoc($pro_changed);
+		$pro_num = mysqli_num_rows($pro_changed);
 		if ($pro_num == 0) {
 			$cover_pic= "img/default_covpic.png";
 		}else {
@@ -31,8 +31,8 @@ $cover_pic_db = $get_pic_row['cover_pic'];
 
 
 //name query
-$about_query = mysql_query("SELECT first_name FROM users WHERE username='$user'");
-$get_result = mysql_fetch_assoc($about_query);
+$about_query = mysqli_query("SELECT first_name FROM users WHERE username='$user'");
+$get_result = mysqli_fetch_assoc($about_query);
 $first_name_user = $get_result['first_name'];
 
 
@@ -79,24 +79,24 @@ $first_name_user = $get_result['first_name'];
 				 			<li style='line-height: 8px;'>
 				 				<?php 
 				 					//getting post comment
-									$get_followR = mysql_query("SELECT * FROM follow WHERE user_to ='$user' ORDER BY id DESC LIMIT 50");
-									$count_get_followR = mysql_num_rows($get_followR);
+									$get_followR = mysqli_query("SELECT * FROM follow WHERE user_to ='$user' ORDER BY id DESC LIMIT 50");
+									$count_get_followR = mysqli_num_rows($get_followR);
 									$count = $count_get_followR;
 									if ($count != 0) {
 										//getting post noti
-										while ($noti = mysql_fetch_assoc($get_followR)) {
+										while ($noti = mysqli_fetch_assoc($get_followR)) {
 											$time = $noti['time'];
 											$user_from = $noti['user_from'];
-											$get_user_info = mysql_query("SELECT * FROM users WHERE username='$user_from'");
-											$get_info = mysql_fetch_assoc($get_user_info);
+											$get_user_info = mysqli_query("SELECT * FROM users WHERE username='$user_from'");
+											$get_info = mysqli_fetch_assoc($get_user_info);
 											$profile_pic_db= $get_info['profile_pic'];
 											$user_from_fname = $get_info['first_name'];
 											$comment_disp = "started following you.";
 											
 											//check for propic delete
-						$pro_changed = mysql_query("SELECT * FROM posts WHERE added_by='$user_from' AND (discription='changed his profile picture.' OR discription='changed her profile picture.') ORDER BY id DESC LIMIT 1");
-						$get_pro_changed = mysql_fetch_assoc($pro_changed);
-		$pro_num = mysql_num_rows($pro_changed);
+						$pro_changed = mysqli_query("SELECT * FROM posts WHERE added_by='$user_from' AND (discription='changed his profile picture.' OR discription='changed her profile picture.') ORDER BY id DESC LIMIT 1");
+						$get_pro_changed = mysqli_fetch_assoc($pro_changed);
+		$pro_num = mysqli_num_rows($pro_changed);
 		if ($pro_num == 0) {
 			$profile_pic = "img/default_propic.png";
 		}else {

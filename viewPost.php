@@ -11,7 +11,7 @@ else {
 
 if (isset($_REQUEST['pid'])) {
 	
-	$id = mysql_real_escape_string($_REQUEST['pid']);
+	$id = mysqli_real_escape_string($_REQUEST['pid']);
 }else {
 	header('location: index.php');
 }
@@ -43,13 +43,13 @@ echo "
 	<div class='profilePosts' style= 'margin: 55px auto';>";
 	
 //for getting post
-$getposts = mysql_query("SELECT * FROM posts WHERE id ='$id'") or die(mysql_error());
-$getposts_num = mysql_num_rows($getposts );
+$getposts = mysqli_query("SELECT * FROM posts WHERE id ='$id'") or die(mysqli_error());
+$getposts_num = mysqli_num_rows($getposts );
 if ($getposts_num == 0) {
 	header('location: newsfeed.php');
 }else {
 
-$row = mysql_fetch_assoc($getposts);
+$row = mysqli_fetch_assoc($getposts);
 $id = $row['id'];
 $body = $row['body'];
 $dwt_body = $row['daowat_body'];
@@ -62,13 +62,13 @@ $sharepostid = $row['share_post'];
 $daowatpostid = $row['daowat_post'];
 $daowat_give = $row['daowat_give'];
 $photos = "./userdata/profile_pics/".$photos_db;
-$get_user_info = mysql_query("SELECT * FROM users WHERE username='$added_by'");
-$get_info = mysql_fetch_assoc($get_user_info);
+$get_user_info = mysqli_query("SELECT * FROM users WHERE username='$added_by'");
+$get_info = mysqli_fetch_assoc($get_user_info);
 $profile_pic_db= $get_info['profile_pic'];
 $gender_user_db = $get_info['gender'];
 $add_by = $get_info['first_name'];
-$get_fname_info = mysql_query("SELECT * FROM users WHERE username='$user_posted_to'");
-$get_fname_info = mysql_fetch_assoc($get_fname_info);
+$get_fname_info = mysqli_query("SELECT * FROM users WHERE username='$user_posted_to'");
+$get_fname_info = mysqli_fetch_assoc($get_fname_info);
 $post_to_fname = $get_fname_info['first_name'];
 //share post info
 if($sharepostid == 0) {
@@ -77,21 +77,21 @@ if($sharepostid == 0) {
 if($daowat_give != 0) {
 	$body = $dwt_body;
 }
-$get_sharepost = mysql_query("SELECT * FROM posts WHERE id='$sharepostid'");
-$post_info = mysql_fetch_assoc($get_sharepost );
+$get_sharepost = mysqli_query("SELECT * FROM posts WHERE id='$sharepostid'");
+$post_info = mysqli_fetch_assoc($get_sharepost );
 $sp_id = $post_info['id'];
 $sp_added_by = $post_info['added_by'];
 $sp_added_photo = $post_info['photos'];
 $sp_photos = "./userdata/profile_pics/".$sp_added_photo;
-$sp_get_user_info = mysql_query("SELECT * FROM users WHERE username='$sp_added_by'");
-$sp_get_info = mysql_fetch_assoc($sp_get_user_info);
+$sp_get_user_info = mysqli_query("SELECT * FROM users WHERE username='$sp_added_by'");
+$sp_get_info = mysqli_fetch_assoc($sp_get_user_info);
 $sp_profile_pic_db= $sp_get_info['profile_pic'];
 $sp_add_by = $sp_get_info['first_name'];
 
 		//check for propic delete
-					$sp_pro_changed = mysql_query("SELECT * FROM posts WHERE added_by='$sp_added_by' AND (discription='changed his profile picture.' OR discription='changed her profile picture.') ORDER BY id DESC LIMIT 1");
-					$sp_get_pro_changed = mysql_fetch_assoc($sp_pro_changed);
-	$sp_pro_num = mysql_num_rows($sp_pro_changed);
+					$sp_pro_changed = mysqli_query("SELECT * FROM posts WHERE added_by='$sp_added_by' AND (discription='changed his profile picture.' OR discription='changed her profile picture.') ORDER BY id DESC LIMIT 1");
+					$sp_get_pro_changed = mysqli_fetch_assoc($sp_pro_changed);
+	$sp_pro_num = mysqli_num_rows($sp_pro_changed);
 	if ($sp_pro_num == 0) {
 		$sp_profile_pic = "img/default_propic.png";
 	}else {
@@ -104,9 +104,9 @@ $sp_add_by = $sp_get_info['first_name'];
 	}
 	
 	//check for propic delete
-					$pro_changed = mysql_query("SELECT * FROM posts WHERE added_by='$added_by' AND (discription='changed his profile picture.' OR discription='changed her profile picture.') ORDER BY id DESC LIMIT 1");
-					$get_pro_changed = mysql_fetch_assoc($pro_changed);
-	$pro_num = mysql_num_rows($pro_changed);
+					$pro_changed = mysqli_query("SELECT * FROM posts WHERE added_by='$added_by' AND (discription='changed his profile picture.' OR discription='changed her profile picture.') ORDER BY id DESC LIMIT 1");
+					$get_pro_changed = mysqli_fetch_assoc($pro_changed);
+	$pro_num = mysqli_num_rows($pro_changed);
 	if ($pro_num == 0) {
 		$profile_pic = "img/default_propic.png";
 	}else {
@@ -139,8 +139,8 @@ if($sharepostid != 0) {
 }
 
 //Get Relevant Comments
-$get_comments = mysql_query("SELECT * FROM post_comments WHERE post_id='$id' ORDER BY id DESC LIMIT 3");
-$comment = mysql_fetch_assoc($get_comments);
+$get_comments = mysqli_query("SELECT * FROM post_comments WHERE post_id='$id' ORDER BY id DESC LIMIT 3");
+$comment = mysqli_fetch_assoc($get_comments);
 $comment_body = $comment['post_body'];
 $posted_to = $comment['posted_to'];
 $posted_by = $comment['posted_by'];
@@ -160,11 +160,11 @@ function toggle<?php echo $id; ?>() {
 
 <?php
 //count comment
-$get_comments = mysql_query("SELECT * FROM post_comments WHERE post_id='$id' ORDER BY id DESC ");
-$count = mysql_num_rows($get_comments);
+$get_comments = mysqli_query("SELECT * FROM post_comments WHERE post_id='$id' ORDER BY id DESC ");
+$count = mysqli_num_rows($get_comments);
 //getting all like
-$get_like = mysql_query("SELECT * FROM post_likes WHERE post_id='$id' ORDER BY id DESC");
-$count_like = mysql_num_rows($get_like);
+$get_like = mysqli_query("SELECT * FROM post_likes WHERE post_id='$id' ORDER BY id DESC");
+$count_like = mysqli_num_rows($get_like);
 //showing data on profile
 		echo "<div class='postBody' >";
 		
@@ -248,8 +248,8 @@ $count_like = mysql_num_rows($get_like);
 			echo "
 			<br /><hr style='margin: 0px 0px 10px 0px;' />
 			<div class='likeComShare'>";
-			$like_query = mysql_query("SELECT * FROM post_likes WHERE user_name='$user' AND post_id='$id' ORDER BY id DESC LIMIT 1");
-			$rows_uname = mysql_num_rows($like_query);
+			$like_query = mysqli_query("SELECT * FROM post_likes WHERE user_name='$user' AND post_id='$id' ORDER BY id DESC LIMIT 1");
+			$rows_uname = mysqli_num_rows($like_query);
 			if ($rows_uname == 1) {
 				echo "<a href='like.php?upid=".$id."' style='color: #0B810B;' >Liked . $count_like</a>";
 			}else {

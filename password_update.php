@@ -43,8 +43,8 @@ $repear_password = trim($repear_password);
 //update pass
 if ($senddata) {
 	//if the information submited
-	$password_query = mysql_query("SELECT * FROM users WHERE username='$user'");
-	while ($row = mysql_fetch_assoc($password_query)) {
+	$password_query = mysqli_query("SELECT * FROM users WHERE username='$user'");
+	while ($row = mysqli_fetch_assoc($password_query)) {
 		$db_password = $row['password'];
 		$db_email = $row['email'];
 		$db_first_name = $row['first_name'];
@@ -58,7 +58,7 @@ if ($senddata) {
 					$error = "<p class='error_echo'>Sorry! But your new password must be 3 or more then 5 character!</p>";
 				}else {
 				$confirmCode   = substr( rand() * 900000 + 100000, 0, 6 );
-				$password_update_query = mysql_query("UPDATE users SET password='$newpassword_md5', confirmCode='$confirmCode' WHERE username='$user'");
+				$password_update_query = mysqli_query("UPDATE users SET password='$newpassword_md5', confirmCode='$confirmCode' WHERE username='$user'");
 				$error = "<p class='succes_echo'>Success! Your password updated.</p>";
 				// send email
 				$msg = "Assalamu Alaikum  ".$db_first_name."

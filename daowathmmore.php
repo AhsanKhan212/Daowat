@@ -17,13 +17,13 @@ else {
  }
  if ($daowathmlastid >= 1) {
  			//getting username
-		 $result = mysql_query("SELECT * FROM posts WHERE id ='$daowathmlastid'") or die(mysql_error());
-		 $name = mysql_fetch_assoc($result);
+		 $result = mysqli_query("SELECT * FROM posts WHERE id ='$daowathmlastid'") or die(mysqli_error());
+		 $name = mysqli_fetch_assoc($result);
 		 $username = $name['added_by'];
 		//timeline query table
-		$getposts = mysql_query("SELECT * FROM daowat WHERE added_by ='$username' AND daowat_give !='0' AND id < $daowathmlastid ORDER BY id DESC LIMIT 7") or die(mysql_error());
-		if (mysql_num_rows($getposts)) {
-			while ($row = mysql_fetch_assoc($getposts)) {
+		$getposts = mysqli_query("SELECT * FROM daowat WHERE added_by ='$username' AND daowat_give !='0' AND id < $daowathmlastid ORDER BY id DESC LIMIT 7") or die(mysqli_error());
+		if (mysqli_num_rows($getposts)) {
+			while ($row = mysqli_fetch_assoc($getposts)) {
 			include ( "./inc/newsfeed.inc.php" );
 			$daowathmlastvalue = $row['id'];
 		}

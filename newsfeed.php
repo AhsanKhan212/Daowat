@@ -9,19 +9,19 @@ else {
 	$user = $_SESSION['user_login'];
 }
 //update online time
-$sql = mysql_query("UPDATE users SET chatOnlineTime=now() WHERE username='$user'");
+$sql = mysqli_query("UPDATE users SET chatOnlineTime=now() WHERE username='$user'");
 
 ?>
 <?php 
 	$username ="";
 	$firstname ="";
 	if (isset($_GET['u'])) {
-		$username = mysql_real_escape_string($_GET['u']);
+		$username = mysqli_real_escape_string($_GET['u']);
 		if (ctype_alnum($username)) {
 			//check user exists
-			$check = mysql_query("SELECT username FROM users WHERE username='$username'");
-			if (mysql_num_rows($check)===1) {
-				$get = mysql_fetch_assoc($check);
+			$check = mysqli_query("SELECT username FROM users WHERE username='$username'");
+			if (mysqli_num_rows($check)===1) {
+				$get = mysqli_fetch_assoc($check);
 				$username = $get['username'];
 			}
 			else {
@@ -30,19 +30,19 @@ $sql = mysql_query("UPDATE users SET chatOnlineTime=now() WHERE username='$user'
 		}
 	}
 
-	$get_title_info = mysql_query("SELECT * FROM users WHERE username='$username'");
-	$get_title_fname = mysql_fetch_assoc($get_title_info);
+	$get_title_info = mysqli_query("SELECT * FROM users WHERE username='$username'");
+	$get_title_fname = mysqli_fetch_assoc($get_title_info);
 	$title_fname = $get_title_fname['first_name'];
 
 	
 //Check whether the user has uploaded a cover pic or not
-$check_pic = mysql_query("SELECT cover_pic FROM users WHERE username='$user'");
-$get_pic_row = mysql_fetch_assoc($check_pic);
+$check_pic = mysqli_query("SELECT cover_pic FROM users WHERE username='$user'");
+$get_pic_row = mysqli_fetch_assoc($check_pic);
 $cover_pic_db = $get_pic_row['cover_pic'];
 //check for userfrom propic delete
-						$pro_changed = mysql_query("SELECT * FROM posts WHERE added_by='$user' AND (discription='updated his cover photo.' OR discription='updated her cover photo.') ORDER BY id DESC LIMIT 1");
-						$get_pro_changed = mysql_fetch_assoc($pro_changed);
-		$pro_num = mysql_num_rows($pro_changed);
+						$pro_changed = mysqli_query("SELECT * FROM posts WHERE added_by='$user' AND (discription='updated his cover photo.' OR discription='updated her cover photo.') ORDER BY id DESC LIMIT 1");
+						$get_pro_changed = mysqli_fetch_assoc($pro_changed);
+		$pro_num = mysqli_num_rows($pro_changed);
 		if ($pro_num == 0) {
 			$cover_pic= "img/default_covpic.png";
 		}else {
@@ -55,18 +55,18 @@ $cover_pic_db = $get_pic_row['cover_pic'];
 		}
 
 //Check whether the user has uploaded a profile pic or not
-$check_pic = mysql_query("SELECT profile_pic FROM users WHERE username='$user'");
-$get_pic_row = mysql_fetch_assoc($check_pic);
+$check_pic = mysqli_query("SELECT profile_pic FROM users WHERE username='$user'");
+$get_pic_row = mysqli_fetch_assoc($check_pic);
 $profile_pic_db = $get_pic_row['profile_pic'];
 //check for userfrom propic delete
-						$pro_changed = mysql_query("SELECT * FROM posts WHERE added_by='$user' AND (discription='changed his profile picture.' OR discription='changed her profile picture.' ORDER BY id DESC LIMIT 1");
-						//$get_pro_changed = mysql_fetch_assoc($pro_changed);
+						$pro_changed = mysqli_query("SELECT * FROM posts WHERE added_by='$user' AND (discription='changed his profile picture.' OR discription='changed her profile picture.' ORDER BY id DESC LIMIT 1");
+						//$get_pro_changed = mysqli_fetch_assoc($pro_changed);
 						if ($pro_changed){
-						   $get_pro_changed = mysql_fetch_assoc($pro_changed);
+						   $get_pro_changed = mysqli_fetch_assoc($pro_changed);
 						}else $get_pro_changed ='';
-		//$pro_num = mysql_num_rows($pro_changed);
+		//$pro_num = mysqli_num_rows($pro_changed);
 		if($pro_changed == true){
-			$pro_num = mysql_num_rows($pro_changed);
+			$pro_num = mysqli_num_rows($pro_changed);
 		}else $pro_num = 0;
 		if ($pro_num == 0) {
 			$profile_pic= "img/default_propic.png";
@@ -152,36 +152,36 @@ $profile_pic_db = $get_pic_row['profile_pic'];
 		$post = isset($_POST['post']) ? $_POST['post'] : '';
 		//$post = htmlspecialchars(@$_POST['post'], ENT_QUOTES);
 		$post = trim($post);
-		$post = mysql_real_escape_string($post);
+		$post = mysqli_real_escape_string($post);
 
 		if ($post != "") {
 			$date_added = date("Y-m-d");
 			$added_by = $user;
 			$user_posted_to = $user;
 			$sqlCommand = "INSERT INTO posts(body,date_added,added_by,user_posted_to) VALUES('$post', '$date_added','$added_by', '$user_posted_to')";
-			$query = mysql_query($sqlCommand) or die (mysql_error());
+			$query = mysqli_query($sqlCommand) or die (mysqli_error());
 		}
 
 		//for getting post
 
-		$getposts = mysql_query("SELECT * FROM posts WHERE newsfeedshow ='1' AND report ='0' AND note='0' AND daowat_give='0' ORDER BY id DESC") or die(mysql_error());
+		$getposts = mysqli_query("SELECT * FROM posts WHERE newsfeedshow ='1' AND report ='0' AND note='0' AND daowat_give='0' ORDER BY id DESC") or die(mysqli_error());
 		
 		echo '<ul id="frndpost">';
 		//declear variable
 		$getpostsNum= 0;
-		while ($row = mysql_fetch_assoc($getposts)) {
+		while ($row = mysqli_fetch_assoc($getposts)) {
 				$added_by = $row['added_by'];
 				if ($added_by == $user) {
 					include ( "./inc/newsfeed.inc.php");
 					$getpostsNum++;
 					
 				}else {
-					$checkDeactiveUser= mysql_query("SELECT * FROM users WHERE username = '$added_by'") or die(mysql_error());
-					$checkDeactiveUser_row = mysql_fetch_assoc($checkDeactiveUser);
+					$checkDeactiveUser= mysqli_query("SELECT * FROM users WHERE username = '$added_by'") or die(mysqli_error());
+					$checkDeactiveUser_row = mysqli_fetch_assoc($checkDeactiveUser);
 					$activeOrNot = $checkDeactiveUser_row ['activated'];
 					if ($activeOrNot != '0') {					
-						$check_if_follow = mysql_query("SELECT * FROM follow WHERE (user_from='$user' AND user_to='$added_by ') ORDER BY id DESC LIMIT 2");
-						$num_follow_found = mysql_num_rows($check_if_follow);
+						$check_if_follow = mysqli_query("SELECT * FROM follow WHERE (user_from='$user' AND user_to='$added_by ') ORDER BY id DESC LIMIT 2");
+						$num_follow_found = mysqli_num_rows($check_if_follow);
 						if ($num_follow_found != "") {
 						include ( "./inc/newsfeed.inc.php");
 						$getpostsNum++;

@@ -55,8 +55,8 @@ echo "
 	<div class='profilePosts' style= 'margin: 55px auto';>";
 	
 //for getting post
-$getposts = mysql_query("SELECT * FROM posts WHERE id ='$id'") or die(mysql_error());
-while ($row = mysql_fetch_assoc($getposts)) {
+$getposts = mysqli_query("SELECT * FROM posts WHERE id ='$id'") or die(mysqli_error());
+while ($row = mysqli_fetch_assoc($getposts)) {
 		$id = $row['id'];
 		$body = $row['body'];
 		$date_added = $row['date_added'];
@@ -65,17 +65,17 @@ while ($row = mysql_fetch_assoc($getposts)) {
 		$discription = $row['discription'];
 		$photos_db = $row['photos'];
 		$photos = "./userdata/profile_pics/".$photos_db;
-		$get_posted_to_info = mysql_query("SELECT * FROM users WHERE username='$user_posted_to'");
-		$get_posted_info = mysql_fetch_assoc($get_posted_to_info);
+		$get_posted_to_info = mysqli_query("SELECT * FROM users WHERE username='$user_posted_to'");
+		$get_posted_info = mysqli_fetch_assoc($get_posted_to_info);
 		$posted_to_fname = $get_posted_info['first_name'];
-		$get_user_info = mysql_query("SELECT * FROM users WHERE username='$added_by'");
-		$get_info = mysql_fetch_assoc($get_user_info);
+		$get_user_info = mysqli_query("SELECT * FROM users WHERE username='$added_by'");
+		$get_info = mysqli_fetch_assoc($get_user_info);
 		$profilepic_info = $get_info['profile_pic'];
 		$add_by_fname = $get_info['first_name'];
 
 		//Get Relevant Comments
-		$get_comments = mysql_query("SELECT * FROM post_comments WHERE post_id='$id' ORDER BY id DESC");
-		$comment = mysql_fetch_assoc($get_comments);
+		$get_comments = mysqli_query("SELECT * FROM post_comments WHERE post_id='$id' ORDER BY id DESC");
+		$comment = mysqli_fetch_assoc($get_comments);
 		$comment_body = $comment['post_body'];
 		$posted_to = $comment['posted_to'];
 		$posted_by = $comment['posted_by'];
@@ -84,8 +84,8 @@ while ($row = mysql_fetch_assoc($getposts)) {
 
 		<?php
 		//count comment
-		$get_comments = mysql_query("SELECT * FROM post_comments WHERE post_id='$id' ORDER BY id DESC");
-		$count = mysql_num_rows($get_comments);
+		$get_comments = mysqli_query("SELECT * FROM post_comments WHERE post_id='$id' ORDER BY id DESC");
+		$count = mysqli_num_rows($get_comments);
 		//showing data on profile
 			if ($profilepic_info == "") {
 				if ($user_posted_to == $added_by) {

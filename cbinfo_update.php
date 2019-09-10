@@ -43,8 +43,8 @@ $send = @$_POST['send'];
 $sendemail = @$_POST['sendemail'];
 $emaildata = @$_POST['emaildata'];
 //Update Bio and first name last name query
-$get_info = mysql_query("SELECT mobile,pub_email,email FROM users WHERE username='$user'");
-$get_row = mysql_fetch_assoc($get_info);
+$get_info = mysqli_query("SELECT mobile,pub_email,email FROM users WHERE username='$user'");
+$get_row = mysqli_fetch_assoc($get_info);
 $db_mobile = $get_row['mobile'];
 $db_pub_email = $get_row['pub_email'];
 $db_email = $get_row['email'];
@@ -55,13 +55,13 @@ $db_email = $get_row['email'];
 if ($sendemail) {
 	$mobile = strip_tags(@$_POST['mobile']);
 	$mobile = trim($mobile);
-	$mobile = mysql_real_escape_string($mobile);
+	$mobile = mysqli_real_escape_string($mobile);
 	$pub_email = strip_tags(@$_POST['pub_email']);
 	$pub_email = trim($pub_email);
-	$pub_email = mysql_real_escape_string($pub_email);
+	$pub_email = mysqli_real_escape_string($pub_email);
 		//submit the form to database
-		$info_submit_query = mysql_query("UPDATE users SET mobile='$mobile' WHERE username='$user'");
-		$info_submit_query = mysql_query("UPDATE users SET pub_email='$pub_email' WHERE username='$user'");
+		$info_submit_query = mysqli_query("UPDATE users SET mobile='$mobile' WHERE username='$user'");
+		$info_submit_query = mysqli_query("UPDATE users SET pub_email='$pub_email' WHERE username='$user'");
 		echo "<script>alert('Successfully Information Updated.')</script>";
 		echo "<script>window.open('cbinfo_update.php','_self')</script>";
 		$error = "<p class='succes_echo'>Information successfully updated.</p>";
@@ -73,21 +73,21 @@ if ($sendemail) {
 if ($emaildata) {
 	$email = strip_tags(@$_POST['email']);
 	$email = trim($email);
-	$email = mysql_real_escape_string($email);
-	$check_for_email = mysql_query("SELECT * FROM users WHERE email='$email'");
-	$email_run = mysql_num_rows($check_for_email);
+	$email = mysqli_real_escape_string($email);
+	$check_for_email = mysqli_query("SELECT * FROM users WHERE email='$email'");
+	$email_run = mysqli_num_rows($check_for_email);
 	if ($email == "") {
 		$error = "<p class='error_echo'>Please type your daowat email!</p>";
 	}else if ($email_run >= 1) {
 		$error = "<p class='error_echo'>Already taken this email!</p>";
 	}else {
 		//getting email
-		$check_for_email1 = mysql_query("SELECT * FROM users WHERE username='$user'");
-		$uemail_fetch_query1 = mysql_fetch_assoc($check_for_email1 );
+		$check_for_email1 = mysqli_query("SELECT * FROM users WHERE username='$user'");
+		$uemail_fetch_query1 = mysqli_fetch_assoc($check_for_email1 );
 		$_SESSION['email'] = $uemail_fetch_query1 ['email'];
 		//submit the form to database
 		$confirmCode   = substr( rand() * 900000 + 100000, 0, 6 );
-		$info_submit_query = mysql_query("UPDATE users SET email='$email', confirmCode='$confirmCode' WHERE username='$user'");
+		$info_submit_query = mysqli_query("UPDATE users SET email='$email', confirmCode='$confirmCode' WHERE username='$user'");
 		echo "<script>window.open('cbinfo_update.php','_self')</script>";
 		$error = "<p class='succes_echo'>Email successfully changed.</p>";
 						// send email

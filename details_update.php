@@ -36,8 +36,8 @@ else {
 $updateinfo = @$_POST['updateinfo'];
 $update = @$_POST['update'];
 //Update Bio and first name last name query
-$get_info = mysql_query("SELECT bio,queote FROM users WHERE username='$user'");
-$get_row = mysql_fetch_assoc($get_info);
+$get_info = mysqli_query("SELECT bio,queote FROM users WHERE username='$user'");
+$get_row = mysqli_fetch_assoc($get_info);
 $db_bio = $get_row['bio'];
 $db_queote = $get_row['queote'];
 
@@ -45,18 +45,18 @@ $db_queote = $get_row['queote'];
 if ($updateinfo) {
 	$bio = $_POST['bio'];
 	$bio = trim($bio);
-	$bio = mysql_real_escape_string($bio);
+	$bio = mysqli_real_escape_string($bio);
 		//submit the form to database
-		$info_submit_query = mysql_query("UPDATE users SET bio='$bio' WHERE username='$user'");
+		$info_submit_query = mysqli_query("UPDATE users SET bio='$bio' WHERE username='$user'");
 		echo "<p class='error_echo'>Your Profile Bio Has Been Updated.</p>";
 		header("Location: about.php?u=$user");
 	}
 if ($update) {
 	$queote = $_POST['queote'];
 	$queote = trim($queote);
-	$queote = mysql_real_escape_string($queote);
+	$queote = mysqli_real_escape_string($queote);
 		//submit the form to database
-		$info_submit_query = mysql_query("UPDATE users SET queote='$queote' WHERE username='$user'");
+		$info_submit_query = mysqli_query("UPDATE users SET queote='$queote' WHERE username='$user'");
 		echo "<p class='error_echo'>Your Profile Queote Has Been Updated.</p>";
 		header("Location: about.php?u=$user");
 	}

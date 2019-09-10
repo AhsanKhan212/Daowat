@@ -13,12 +13,12 @@ else {
 	$username ="";
 	$firstname ="";
 	if (isset($_GET['u'])) {
-		$username = mysql_real_escape_string($_GET['u']);
+		$username = mysqli_real_escape_string($_GET['u']);
 		if (ctype_alnum($username)) {
 			//check user exists
-			$check = mysql_query("SELECT username, first_name FROM users WHERE username='$username'");
-			if (mysql_num_rows($check)===1) {
-				$get = mysql_fetch_assoc($check);
+			$check = mysqli_query("SELECT username, first_name FROM users WHERE username='$username'");
+			if (mysqli_num_rows($check)===1) {
+				$get = mysqli_fetch_assoc($check);
 				$username = $get['username'];
 			}
 			else {
@@ -27,8 +27,8 @@ else {
 		}
 	}
 
-	$get_title_info = mysql_query("SELECT * FROM users WHERE username='$username'");
-	$get_title_fname = mysql_fetch_assoc($get_title_info);
+	$get_title_info = mysqli_query("SELECT * FROM users WHERE username='$username'");
+	$get_title_fname = mysqli_fetch_assoc($get_title_info);
 	$title_fname = $get_title_fname['first_name'];
 ?>
 <?php
@@ -37,7 +37,7 @@ else {
 $error = "";
 $post = htmlspecialchars(@$_POST['post'], ENT_QUOTES);
 $post =  trim($post);
-$post = mysql_real_escape_string($post);
+$post = mysqli_real_escape_string($post);
 
 if ($post != "") {
 	$date_added = date("Y-m-d");
@@ -45,7 +45,7 @@ if ($post != "") {
 	$user_posted_to = $username;
 	$discription = $_POST['privacy'];
 	$sqlCommand = "INSERT INTO posts VALUES('', '$post','', '$date_added','', '$added_by', '$user_posted_to', '','','', '$discription', '','','','1','$_POST[privacy]')";
-	$query = mysql_query($sqlCommand) or die (mysql_error());
+	$query = mysqli_query($sqlCommand) or die (mysqli_error());
 	header("Location: note.php?u=$user");
 }
 ?>
@@ -84,8 +84,8 @@ if ($post != "") {
 <body>
 <div id="top"></div>
 <?php 
-$result = mysql_query("SELECT * FROM users WHERE username='$username'");
-	$num = mysql_num_rows($result);
+$result = mysqli_query("SELECT * FROM users WHERE username='$username'");
+	$num = mysqli_num_rows($result);
 	if ($num == 1) {
 			include ( "./inc/header.inc.php");
 			include ( "./inc/profile.inc.php");
@@ -135,17 +135,17 @@ $result = mysql_query("SELECT * FROM users WHERE username='$username'");
 				//for getting note
 					$noteshowmorelastid = "";
 					if ($user == $username) {
-						$getposts = mysql_query("SELECT * FROM posts WHERE user_posted_to ='$username' && note='1' ORDER BY id DESC LIMIT 5") or die(mysql_error());
+						$getposts = mysqli_query("SELECT * FROM posts WHERE user_posted_to ='$username' && note='1' ORDER BY id DESC LIMIT 5") or die(mysqli_error());
 					}else {
-						$getposts = mysql_query("SELECT * FROM posts WHERE user_posted_to ='$username' && note='1' && note_privacy='public' ORDER BY id DESC LIMIT 5") or die(mysql_error());
+						$getposts = mysqli_query("SELECT * FROM posts WHERE user_posted_to ='$username' && note='1' && note_privacy='public' ORDER BY id DESC LIMIT 5") or die(mysqli_error());
 					}
-				$count_note = mysql_num_rows($getposts);
+				$count_note = mysqli_num_rows($getposts);
 				if ($count_note == 0) {
 					echo "<p class='nonotefound'>No notes found!</p>";
 				}
 				
 				echo '<ul id="noteshowmore">';
-				while ($row = mysql_fetch_assoc($getposts)) {
+				while ($row = mysqli_fetch_assoc($getposts)) {
 						include ( "./inc/getProfilepost.inc.php");
 						$noteshowmorelastid = $row['id'];
 						$profilehm_uname = $row['user_posted_to'];

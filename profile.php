@@ -10,19 +10,19 @@ else {
 }
 
 //update online time
-$sql = mysql_query("UPDATE users SET chatOnlineTime=now() WHERE username='$user'");
+$sql = mysqlii_query("UPDATE users SET chatOnlineTime=now() WHERE username='$user'");
 
 ?>
 <?php 
 	$username ="";
 	$firstname ="";
 	if (isset($_GET['u'])) {
-		$username = mysql_real_escape_string($_GET['u']);
+		$username = mysqlii_real_escape_string($_GET['u']);
 		if (ctype_alnum($username)) {
 			//check user exists
-			$check = mysql_query("SELECT username, first_name FROM users WHERE username='$username'");
-			if (mysql_num_rows($check)===1) {
-				$get = mysql_fetch_assoc($check);
+			$check = mysqlii_query("SELECT username, first_name FROM users WHERE username='$username'");
+			if (mysqlii_num_rows($check)===1) {
+				$get = mysqlii_fetch_assoc($check);
 				$username = $get['username'];
 			}
 			else {
@@ -31,8 +31,8 @@ $sql = mysql_query("UPDATE users SET chatOnlineTime=now() WHERE username='$user'
 		}
 	}
 
-	$get_title_info = mysql_query("SELECT * FROM users WHERE username='$username'");
-	$get_title_fname = mysql_fetch_assoc($get_title_info);
+	$get_title_info = mysqlii_query("SELECT * FROM users WHERE username='$username'");
+	$get_title_fname = mysqlii_fetch_assoc($get_title_info);
 	$title_fname = $get_title_fname['first_name'];
 ?>
 <!DOCTYPE html>
@@ -69,8 +69,8 @@ $sql = mysql_query("UPDATE users SET chatOnlineTime=now() WHERE username='$user'
 <body>
 <div id="top"></div>
 <?php 
-$result = mysql_query("SELECT * FROM users WHERE username='$username'");
-	$num = mysql_num_rows($result);
+$result = mysqlii_query("SELECT * FROM users WHERE username='$username'");
+	$num = mysqlii_num_rows($result);
 	if ($num == 1) {
 			include ( "./inc/header.inc.php");
 			include ( "./inc/profile.inc.php");
@@ -99,8 +99,8 @@ $result = mysql_query("SELECT * FROM users WHERE username='$username'");
 		echo '	
 		<div id="top">
 			<div style="width: 560px; margin: 0 auto;">';
-			$get_msg_num = mysql_query("SELECT * FROM pvt_messages WHERE user_from='$username' AND user_to='$user' LIMIT 2");
-			$msg_count = mysql_num_rows($get_msg_num);
+			$get_msg_num = mysqlii_query("SELECT * FROM pvt_messages WHERE user_from='$username' AND user_to='$user' LIMIT 2");
+			$msg_count = mysqlii_num_rows($get_msg_num);
 			if (($msg_count >=1 ) || ($username == $user)){
 				echo '
 					<div class="postForm">
@@ -119,7 +119,7 @@ $result = mysql_query("SELECT * FROM users WHERE username='$username'");
 					$profilehmlastid = "";
 					$post = htmlspecialchars(@$_POST['post'], ENT_QUOTES);
 					$post = trim($post);
-					$post = mysql_real_escape_string($post);
+					$post = mysqlii_real_escape_string($post);
 
 					if ($post != "") {
 						$date_added = date("Y-m-d");
@@ -131,15 +131,15 @@ $result = mysql_query("SELECT * FROM users WHERE username='$username'");
 							$newsfeedshow = '0';
 						}
 						$sqlCommand = "INSERT INTO posts(body,date_added,added_by,user_posted_to,newsfeedshow ) VALUES('$post', '$date_added','$added_by', '$user_posted_to', '$newsfeedshow')";
-						$query = mysql_query($sqlCommand) or die (mysql_error());
+						$query = mysqlii_query($sqlCommand) or die (mysqlii_error());
 					}
 
 				//for getting post
 
-				$getposts = mysql_query("SELECT * FROM posts WHERE user_posted_to ='$username' AND daowat_give='0' AND note='0' AND report='0' ORDER BY id DESC LIMIT 9") or die(mysql_error());
-				$count_post = mysql_num_rows($getposts);
+				$getposts = mysqlii_query("SELECT * FROM posts WHERE user_posted_to ='$username' AND daowat_give='0' AND note='0' AND report='0' ORDER BY id DESC LIMIT 9") or die(mysqlii_error());
+				$count_post = mysqlii_num_rows($getposts);
 				echo '<ul id="profilehmpost">';
-				while ($row = mysql_fetch_assoc($getposts)) {
+				while ($row = mysqlii_fetch_assoc($getposts)) {
 						include ( "./inc/newsfeed.inc.php");
 						$profilehmlastid = $row['id'];
 						$profilehm_uname = $row['user_posted_to'];

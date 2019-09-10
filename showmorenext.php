@@ -18,9 +18,9 @@ else {
   
  if ($lastid >= 1) {
 		//timeline query table
-		$getposts = mysql_query("SELECT * FROM posts WHERE daowat_give !='0' AND id < $lastid ORDER BY id DESC LIMIT 7") or die(mysql_error());
-		if (mysql_num_rows($getposts)) {
-			while ($row = mysql_fetch_assoc($getposts)) {
+		$getposts = mysqli_query("SELECT * FROM posts WHERE daowat_give !='0' AND id < $lastid ORDER BY id DESC LIMIT 7") or die(mysqli_error());
+		if (mysqli_num_rows($getposts)) {
+			while ($row = mysqli_fetch_assoc($getposts)) {
 			include ( "./inc/newsfeed.inc.php" );
 			$lastvalue = $row['id'];
 		}

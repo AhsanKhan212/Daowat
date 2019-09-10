@@ -4,31 +4,31 @@
 
 
 //gettting user gender
-$get_user_gender = mysql_query("SELECT * FROM users WHERE username='$user'");
-$gender_user_row = mysql_fetch_assoc($get_user_gender);
+$get_user_gender = mysqli_query("SELECT * FROM users WHERE username='$user'");
+$gender_user_row = mysqli_fetch_assoc($get_user_gender);
 $user_gender_value = $gender_user_row['gender'];
 if($user_gender_value == 1) {
-	$get_ppl_info = mysql_query("SELECT * FROM users WHERE username!='$user' AND gender='1' AND activated='1' AND blocked_user='0' ORDER BY  RAND() ");
+	$get_ppl_info = mysqli_query("SELECT * FROM users WHERE username!='$user' AND gender='1' AND activated='1' AND blocked_user='0' ORDER BY  RAND() ");
 	//declear variable
 	$getuserNum= '0';
 	if($get_ppl_info === FALSE) { 
-	    die(mysql_error()); // TODO: better error handling
+	    die(mysqli_error()); // TODO: better error handling
 	}
 
-	while ($row_user = mysql_fetch_assoc($get_ppl_info)) {
+	while ($row_user = mysqli_fetch_assoc($get_ppl_info)) {
 			
 			$user_name= $row_user['username'];
 			//if follow	
-			$if_user_to_follow = mysql_query("SELECT * FROM follow WHERE (user_from='$user' AND user_to='$user_name')");
-			$count_user_to_follow = mysql_num_rows($if_user_to_follow);
+			$if_user_to_follow = mysqli_query("SELECT * FROM follow WHERE (user_from='$user' AND user_to='$user_name')");
+			$count_user_to_follow = mysqli_num_rows($if_user_to_follow);
 			if ($count_user_to_follow == 0) {
 			  	$profile_pic_db= $row_user['profile_pic'];
 				$user_name_f = $row_user['first_name'];
 	
 				//check for propic delete
-				$pro_changed = mysql_query("SELECT * FROM posts WHERE added_by='$user_name' AND (discription='changed his profile picture.' OR discription='changed her profile picture.') ORDER BY id DESC LIMIT 1");
-				$get_pro_changed = mysql_fetch_assoc($pro_changed);
-				$pro_num = mysql_num_rows($pro_changed);
+				$pro_changed = mysqli_query("SELECT * FROM posts WHERE added_by='$user_name' AND (discription='changed his profile picture.' OR discription='changed her profile picture.') ORDER BY id DESC LIMIT 1");
+				$get_pro_changed = mysqli_fetch_assoc($pro_changed);
+				$pro_num = mysqli_num_rows($pro_changed);
 				if ($pro_num == 0) {
 					$profile_pic = "img/default_propic.png";
 				}else {
@@ -76,7 +76,7 @@ if($user_gender_value == 1) {
 
 
 }else if($user_gender_value == 2) {
-	$get_user = mysql_query("SELECT * FROM users WHERE gender='2'");
+	$get_user = mysqli_query("SELECT * FROM users WHERE gender='2'");
 
 }
 

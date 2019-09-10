@@ -13,12 +13,12 @@ else {
 	$username ="";
 	$firstname ="";
 	if (isset($_GET['u'])) {
-		$username = mysql_real_escape_string($_GET['u']);
+		$username = mysqli_real_escape_string($_GET['u']);
 		if (ctype_alnum($username)) {
 			//check user exists
-			$check = mysql_query("SELECT username, first_name FROM users WHERE username='$username'");
-			if (mysql_num_rows($check)===1) {
-				$get = mysql_fetch_assoc($check);
+			$check = mysqli_query("SELECT username, first_name FROM users WHERE username='$username'");
+			if (mysqli_num_rows($check)===1) {
+				$get = mysqli_fetch_assoc($check);
 				$username = $get['username'];
 				$firstname = $get['first_name'];
 			}
@@ -28,8 +28,8 @@ else {
 		}
 	}
 
-	$get_title_info = mysql_query("SELECT * FROM users WHERE username='$username'");
-	$get_title_fname = mysql_fetch_assoc($get_title_info);
+	$get_title_info = mysqli_query("SELECT * FROM users WHERE username='$username'");
+	$get_title_fname = mysqli_fetch_assoc($get_title_info);
 	$title_fname = $get_title_fname['first_name'];
 ?>
 <!DOCTYPE html>
@@ -44,8 +44,8 @@ else {
 
 	<?php 
 
-	$result = mysql_query("SELECT * FROM users WHERE username='$username'");
-	$num = mysql_num_rows($result);
+	$result = mysqli_query("SELECT * FROM users WHERE username='$username'");
+	$num = mysqli_num_rows($result);
 	if ($num == 1) {
 
 	include ( "./inc/header.inc.php");
@@ -72,12 +72,12 @@ else {
 			</div>
 		</div>
 	</div>';
-	$get_msg_num = mysql_query("SELECT * FROM pvt_messages WHERE user_from='$username' AND user_to='$user' LIMIT 2");
-	$msg_count = mysql_num_rows($get_msg_num);
+	$get_msg_num = mysqli_query("SELECT * FROM pvt_messages WHERE user_from='$username' AND user_to='$user' LIMIT 2");
+	$msg_count = mysqli_num_rows($get_msg_num);
 	if (($msg_count >=1 ) || ($username == $user)) {
 
-	$about_query = mysql_query("SELECT school,concentration,city,hometown,queote,bio,company,position,mobile,pub_email,relationship FROM users WHERE username='$username'");
-					$get_result = mysql_fetch_assoc($about_query);
+	$about_query = mysqli_query("SELECT school,concentration,city,hometown,queote,bio,company,position,mobile,pub_email,relationship FROM users WHERE username='$username'");
+					$get_result = mysqli_fetch_assoc($about_query);
 					$school_name_user = $get_result['school'];
 					$concentration_name_user = $get_result['concentration'];
 					$city_name_user = $get_result['city'];

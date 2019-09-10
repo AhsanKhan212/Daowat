@@ -61,10 +61,10 @@
 					<?php
 
 					//timeline query table
-					$getposts = mysql_query("SELECT * FROM daowat ORDER BY id DESC LIMIT 10") or die(mysql_error());
-					if (mysql_num_rows($getposts)) {
+					$getposts = mysqli_query("SELECT * FROM daowat ORDER BY id DESC LIMIT 10") or die(mysqli_error());
+					if (mysqli_num_rows($getposts)) {
 					echo '<ul id="recs">';
-					while ($row = mysql_fetch_assoc($getposts)) {
+					while ($row = mysqli_fetch_assoc($getposts)) {
 						include ( "./inc/getDaowatpost.inc.php" );
 					}
 					echo '<li class="getmore" ><a href="signin.php">Show More</a></li>';

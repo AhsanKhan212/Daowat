@@ -12,7 +12,7 @@ else {
 	if (isset($_REQUEST['did'])) {
 		$dwt_id = $_REQUEST['did'];
 	
-		$insertDwtlike = mysql_query("INSERT INTO dwt_likes VALUES ('','$user','$dwt_id')");
+		$insertDwtlike = mysqli_query("INSERT INTO dwt_likes VALUES ('','$user','$dwt_id')");
 		header("location: index.php");
 	}else {
 		header('location: index.php');

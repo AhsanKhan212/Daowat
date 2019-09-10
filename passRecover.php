@@ -11,18 +11,18 @@ $error = "";
 //question update
 //password variable
 $username = strip_tags(@$_POST['username']);
-$username = mysql_real_escape_string($username);
+$username = mysqli_real_escape_string($username);
 
 //Check whether the user has uploaded a profile pic or not
-$check_pic = mysql_query("SELECT profile_pic, first_name, username FROM users WHERE username='$username' || email='$username'");
-$get_pic_row = mysql_fetch_assoc($check_pic);
+$check_pic = mysqli_query("SELECT profile_pic, first_name, username FROM users WHERE username='$username' || email='$username'");
+$get_pic_row = mysqli_fetch_assoc($check_pic);
 $profile_pic_db = $get_pic_row['profile_pic'];
 $pic_uname = $get_pic_row['username'];
 $fullname_db = $get_pic_row['first_name'];
 //check for propic delete
-$pro_changed = mysql_query("SELECT * FROM posts WHERE added_by='$pic_uname' AND (discription='changed his profile picture.' OR discription='changed her profile picture.') ORDER BY id DESC LIMIT 1");
-$get_pro_changed = mysql_fetch_assoc($pro_changed);
-$pro_num = mysql_num_rows($pro_changed);
+$pro_changed = mysqli_query("SELECT * FROM posts WHERE added_by='$pic_uname' AND (discription='changed his profile picture.' OR discription='changed her profile picture.') ORDER BY id DESC LIMIT 1");
+$get_pro_changed = mysqli_fetch_assoc($pro_changed);
+$pro_num = mysqli_num_rows($pro_changed);
 if ($pro_num == 0) {
 	$profile_pic = "img/default_propic.png";
 }else {
@@ -37,10 +37,10 @@ if ($pro_num == 0) {
 //update pass
 if (isset($_POST['searchId'])) {
 	//if the information submited
-	$username_query = mysql_query("SELECT * FROM users WHERE username='$username' || email='$username'");
-	$username_query_num = mysql_num_rows($username_query);
+	$username_query = mysqli_query("SELECT * FROM users WHERE username='$username' || email='$username'");
+	$username_query_num = mysqli_num_rows($username_query);
 	if ($username_query_num >= 1) {
-		$username_fetch_query = mysql_fetch_assoc($username_query);
+		$username_fetch_query = mysqli_fetch_assoc($username_query);
 		$get_username_fetch_query = $username_fetch_query['username'];
 		$get_email_fetch_query = $username_fetch_query['email'];
 		$get_active_fetch_query = $username_fetch_query['activated'];
@@ -90,17 +90,17 @@ if (isset($_POST['searchId'])) {
 
 //checking email
 $recovEmail = strip_tags(@$_POST['recovEmail']);
-$recovEmail = mysql_real_escape_string($recovEmail);
+$recovEmail = mysqli_real_escape_string($recovEmail);
 if (isset($_POST['searchRecovEmail'])) {
 	$username = $_SESSION['username'];
-	$searchRecovEmail_query = mysql_query("SELECT * FROM users WHERE (email='$recovEmail' AND username='$username')");
-	$searchRecovEmail_query_num = mysql_num_rows($searchRecovEmail_query);
-	$usernm_fetch_query = mysql_fetch_assoc($searchRecovEmail_query);
+	$searchRecovEmail_query = mysqli_query("SELECT * FROM users WHERE (email='$recovEmail' AND username='$username')");
+	$searchRecovEmail_query_num = mysqli_num_rows($searchRecovEmail_query);
+	$usernm_fetch_query = mysqli_fetch_assoc($searchRecovEmail_query);
 	$get_first_nm_fetch_query = $usernm_fetch_query['first_name'];
 	if ($searchRecovEmail_query_num >= 1) {
 		$confirmCode   = substr( rand() * 900000 + 100000, 0, 6 );
 		$confirmCodeQuery = "UPDATE users SET confirmCode='$confirmCode' WHERE (username='$username' AND email='$recovEmail')";
-		if (mysql_query($confirmCodeQuery)) {
+		if (mysqli_query($confirmCodeQuery)) {
 			$_SESSION['final_uname'] = $username;
 			$error = "<p class='succes_echo'>Verification code send to your email.</p>";
 			// send email
@@ -135,14 +135,14 @@ if (isset($_POST['searchRecovEmail'])) {
 if (isset($_POST['searchRecovEmail2'])) {
 	$user_con_email = $_SESSION['con_email'];
 	$user_con_name = $_SESSION['con_uname'];
-	$searchRecovEmail_query = mysql_query("SELECT * FROM users WHERE (email='$user_con_email' AND username='$user_con_name')");
-	$searchRecovEmail_query_num = mysql_num_rows($searchRecovEmail_query);
-	$usernm_fetch_query = mysql_fetch_assoc($searchRecovEmail_query);
+	$searchRecovEmail_query = mysqli_query("SELECT * FROM users WHERE (email='$user_con_email' AND username='$user_con_name')");
+	$searchRecovEmail_query_num = mysqli_num_rows($searchRecovEmail_query);
+	$usernm_fetch_query = mysqli_fetch_assoc($searchRecovEmail_query);
 	$get_first_nm_fetch_query = $usernm_fetch_query['first_name'];
 	if ($searchRecovEmail_query_num >= 1) {
 		$confirmCode   = substr( rand() * 900000 + 100000, 0, 6 );
 		$confirmCodeQuery = "UPDATE users SET confirmCode='$confirmCode' WHERE (email='$user_con_email' AND username='$user_con_name')";
-		if (mysql_query($confirmCodeQuery)) {
+		if (mysqli_query($confirmCodeQuery)) {
 			$_SESSION['final_uname'] = $user_con_name;
 			$error = "<p class='succes_echo'>Verification code send to your email.</p>";
 			// send email
@@ -175,16 +175,16 @@ if (isset($_POST['searchRecovEmail2'])) {
 $confirmMailCode = strip_tags(@$_POST['confirmMailCode']);
 $newpassword = strip_tags(@$_POST['newpassword']);
 $repear_password = strip_tags(@$_POST['newpassword2']);
-$confirmMailCode = mysql_real_escape_string($confirmMailCode);
-$newpassword = mysql_real_escape_string($newpassword);
-$repear_password = mysql_real_escape_string($repear_password);
+$confirmMailCode = mysqli_real_escape_string($confirmMailCode);
+$newpassword = mysqli_real_escape_string($newpassword);
+$repear_password = mysqli_real_escape_string($repear_password);
 if (isset($_POST['confrmRessetpass'])) {
 	$unameCnfrm = $_SESSION['final_uname'];
 	if ($unameCnfrm != '') {
-		$unameCnfrm_query = mysql_query("SELECT * FROM users WHERE username='$unameCnfrm'");
-		$unameCnfrm_query_num = mysql_num_rows($unameCnfrm_query);
+		$unameCnfrm_query = mysqli_query("SELECT * FROM users WHERE username='$unameCnfrm'");
+		$unameCnfrm_query_num = mysqli_num_rows($unameCnfrm_query);
 		if ($unameCnfrm_query_num >= 1) {
-			$unameCnfrm_fetch_query = mysql_fetch_assoc($unameCnfrm_query);
+			$unameCnfrm_fetch_query = mysqli_fetch_assoc($unameCnfrm_query);
 			$get_uName_fetch_query = $unameCnfrm_fetch_query['username'];
 			$get_confirmCode_fetch_query = $unameCnfrm_fetch_query['confirmCode'];
 			$get_uEmail_fetch_query = $unameCnfrm_fetch_query['email'];
@@ -192,7 +192,7 @@ if (isset($_POST['confrmRessetpass'])) {
 				if ($newpassword == $repear_password) {
 					$newpassword = md5($newpassword);
 					$updatePassQuery = "UPDATE users SET password='$newpassword', activated='1' WHERE (username='$unameCnfrm')";
-					if (mysql_query($updatePassQuery)) {
+					if (mysqli_query($updatePassQuery)) {
 						$error = "<p class='succes_echo'>Password successfully changed.</p>";
 						// send email
 						$msg = "Successfully your Daowat password has been changed. 

@@ -17,18 +17,18 @@ else {
  }
  if ($noteshowmorelastid >= 1) {
  			//getting note_uname
-		 $result = mysql_query("SELECT * FROM posts WHERE id ='$noteshowmorelastid'") or die(mysql_error());
-		 $name = mysql_fetch_assoc($result);
+		 $result = mysqli_query("SELECT * FROM posts WHERE id ='$noteshowmorelastid'") or die(mysqli_error());
+		 $name = mysqli_fetch_assoc($result);
 		 $note_uname = $name['user_posted_to'];
 		//timeline query table
 
 		if ($user == $note_uname) {
-			$getposts = mysql_query("SELECT * FROM posts WHERE user_posted_to ='$note_uname' AND note='1' AND id < $noteshowmorelastid ORDER BY id DESC LIMIT 5") or die(mysql_error());
+			$getposts = mysqli_query("SELECT * FROM posts WHERE user_posted_to ='$note_uname' AND note='1' AND id < $noteshowmorelastid ORDER BY id DESC LIMIT 5") or die(mysqli_error());
 		}else {
-			$getposts = mysql_query("SELECT * FROM posts WHERE user_posted_to ='$note_uname' AND note='1' AND note_privacy='public' AND id < $noteshowmorelastid ORDER BY id DESC LIMIT 5") or die(mysql_error());
+			$getposts = mysqli_query("SELECT * FROM posts WHERE user_posted_to ='$note_uname' AND note='1' AND note_privacy='public' AND id < $noteshowmorelastid ORDER BY id DESC LIMIT 5") or die(mysqli_error());
 		}
-		if (mysql_num_rows($getposts)) {
-			while ($row = mysql_fetch_assoc($getposts)) {
+		if (mysqli_num_rows($getposts)) {
+			while ($row = mysqli_fetch_assoc($getposts)) {
 			include ( "./inc/getProfilepost.inc.php" );
 			$noteshowmorelastvalue = $row['id'];
 		}

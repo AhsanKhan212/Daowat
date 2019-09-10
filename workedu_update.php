@@ -38,8 +38,8 @@ else {
 $updatework = @$_POST['updatework'];
 $updateinfo = @$_POST['updateinfo'];
 //Update Bio and first name last name query
-$get_info = mysql_query("SELECT company, position, school, concentration FROM users WHERE username='$user'");
-$get_row = mysql_fetch_assoc($get_info);
+$get_info = mysqli_query("SELECT company, position, school, concentration FROM users WHERE username='$user'");
+$get_row = mysqli_fetch_assoc($get_info);
 $db_company = $get_row['company'];
 $db_position = $get_row['position'];
 $db_school = $get_row['school'];
@@ -54,7 +54,7 @@ if ($updatework) {
 	$position = trim($position);
 	$position = ucwords($position);
 		//submit the form to database
-		$info_submit_query = mysql_query("UPDATE users SET company='$company', position='$position' WHERE username='$user'");
+		$info_submit_query = mysqli_query("UPDATE users SET company='$company', position='$position' WHERE username='$user'");
 		echo "<p class='error_echo'>Your Profile Information Has Been Updated.</p>";
 		header("Location: about.php?u=$user");
 
@@ -69,7 +69,7 @@ if ($updateinfo) {
 	$concentration = ucwords($concentration);
 
 		//submit the form to database
-		$info_submit_query = mysql_query("UPDATE users SET school='$school', concentration='$concentration' WHERE username='$user'");
+		$info_submit_query = mysqli_query("UPDATE users SET school='$school', concentration='$concentration' WHERE username='$user'");
 		echo "<p class='error_echo'>Your Profile Information Has Been Updated.</p>";
 		header("Location: about.php?u=$user");
 }

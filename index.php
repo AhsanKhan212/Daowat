@@ -17,16 +17,16 @@ $region = $geo["geoplugin_regionName"];
 $country = $geo["geoplugin_countryName"];
 */
 //update online time
-$sql = mysql_query("UPDATE users SET chatOnlineTime=now() WHERE username='$user'");
+$sql = mysqlii_query("UPDATE users SET chatOnlineTime=now() WHERE username='$user'");
 
 $username ="";
 if (isset($_GET['u'])) {
-	$username = mysql_real_escape_string($_GET['u']);
+	$username = mysqlii_real_escape_string($_GET['u']);
 	if (ctype_alnum($username)) {
 		//check user exists
-		$check = mysql_query("SELECT username, first_name FROM users WHERE username='$username'");
-		if (mysql_num_rows($check)===1) {
-			$get = mysql_fetch_assoc($check);
+		$check = mysqlii_query("SELECT username, first_name FROM users WHERE username='$username'");
+		if (mysqlii_num_rows($check)===1) {
+			$get = mysqlii_fetch_assoc($check);
 			$username = $get['username'];
 		}
 		else {
@@ -36,13 +36,13 @@ if (isset($_GET['u'])) {
 }
 
 //Check whether the user has uploaded a cover pic or not
-$check_pic = mysql_query("SELECT cover_pic FROM users WHERE username='$user'");
-$get_pic_row = mysql_fetch_assoc($check_pic);
+$check_pic = mysqlii_query("SELECT cover_pic FROM users WHERE username='$user'");
+$get_pic_row = mysqlii_fetch_assoc($check_pic);
 $cover_pic_db = $get_pic_row['cover_pic'];
 //check for userfrom propic delete
-						$pro_changed = mysql_query("SELECT * FROM posts WHERE added_by='$user' AND (discription='updated his cover photo.' OR discription='updated her cover photo.') ORDER BY id DESC LIMIT 1");
-						$get_pro_changed = mysql_fetch_assoc($pro_changed);
-		$pro_num = mysql_num_rows($pro_changed);
+						$pro_changed = mysqlii_query("SELECT * FROM posts WHERE added_by='$user' AND (discription='updated his cover photo.' OR discription='updated her cover photo.') ORDER BY id DESC LIMIT 1");
+						$get_pro_changed = mysqlii_fetch_assoc($pro_changed);
+		$pro_num = mysqlii_num_rows($pro_changed);
 		if ($pro_num == 0) {
 			$cover_pic= "img/default_covpic.png";
 		}else {
@@ -55,13 +55,13 @@ $cover_pic_db = $get_pic_row['cover_pic'];
 		}
 
 //Check whether the user has uploaded a profile pic or not
-$check_pic = mysql_query("SELECT profile_pic FROM users WHERE username='$user'");
-$get_pic_row = mysql_fetch_assoc($check_pic);
+$check_pic = mysqlii_query("SELECT profile_pic FROM users WHERE username='$user'");
+$get_pic_row = mysqlii_fetch_assoc($check_pic);
 $profile_pic_db = $get_pic_row['profile_pic'];
 //check for userfrom propic delete
-						$pro_changed = mysql_query("SELECT * FROM posts WHERE added_by='$user' AND (discription='changed his profile picture.' OR discription='changed her profile picture.') ORDER BY id DESC LIMIT 1");
-						$get_pro_changed = mysql_fetch_assoc($pro_changed);
-		$pro_num = mysql_num_rows($pro_changed);
+						$pro_changed = mysqlii_query("SELECT * FROM posts WHERE added_by='$user' AND (discription='changed his profile picture.' OR discription='changed her profile picture.') ORDER BY id DESC LIMIT 1");
+						$get_pro_changed = mysqlii_fetch_assoc($pro_changed);
+		$pro_num = mysqlii_num_rows($pro_changed);
 		if ($pro_num == 0) {
 			$profile_pic= "img/default_propic.png";
 		}else {
@@ -74,8 +74,8 @@ $profile_pic_db = $get_pic_row['profile_pic'];
 		}
 
 //name query
-$about_query = mysql_query("SELECT first_name FROM users WHERE username='$user'");
-$get_result = mysql_fetch_assoc($about_query);
+$about_query = mysqlii_query("SELECT first_name FROM users WHERE username='$user'");
+$get_result = mysqlii_fetch_assoc($about_query);
 $first_name_user = $get_result['first_name'];
 
 
@@ -154,23 +154,23 @@ $first_name_user = $get_result['first_name'];
 					//$post = $_POST['post'];
 					$post = isset($_POST['post']) ? $_POST['post'] : '';
 					$post =  trim($post);
-					$post = mysql_real_escape_string($post);
+					$post = mysqlii_real_escape_string($post);
 
 					if ($post != "") {
 						$date_added = date("Y-m-d");
 						$added_by = $user;
 						$user_posted_to = $user;
 						$sqlCommand = "INSERT INTO posts(daowat_body,date_added,added_by,user_posted_to,daowat_give) VALUES('$post', '$date_added','$added_by', '$user_posted_to','1')";
-						$query = mysql_query($sqlCommand) or die (mysql_error());
+						$query = mysqlii_query($sqlCommand) or die (mysqlii_error());
 						header("Location: index.php");
 					}
 
 					//timeline query table
 					$lastid = "";
-					$getposts = mysql_query("SELECT * FROM posts WHERE daowat_give !='0' ORDER BY id DESC LIMIT 10") or die(mysql_error());
-					if (mysql_num_rows($getposts)) {
+					$getposts = mysqlii_query("SELECT * FROM posts WHERE daowat_give !='0' ORDER BY id DESC LIMIT 10") or die(mysqlii_error());
+					if (mysqlii_num_rows($getposts)) {
 					echo '<ul id="recs">';
-					while ($row = mysql_fetch_assoc($getposts)) {
+					while ($row = mysqlii_fetch_assoc($getposts)) {
 						include ( "./inc/newsfeed.inc.php" );
 						$lastid = $row['id'];
 					}

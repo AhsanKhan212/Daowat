@@ -73,23 +73,23 @@ if (isset($_REQUEST['id'])) {
 	if (isset($_POST['postComment' . $getid . ''])) {
 		$post_body = $_POST['post_body'];
 		$date_added = date("Y-m-d");
-		$query = mysql_query("SELECT id,added_by  FROM posts WHERE id='$getid'");
-		$query_row = mysql_fetch_assoc($query);
+		$query = mysqli_query("SELECT id,added_by  FROM posts WHERE id='$getid'");
+		$query_row = mysqli_fetch_assoc($query);
 		$posted_to = $query_row['added_by'];
-		$insertPost = mysql_query("INSERT INTO post_comments VALUES ('','$post_body','$date_added', NOW(), '$user','$posted_to','no','$getid')");
+		$insertPost = mysqli_query("INSERT INTO post_comments VALUES ('','$post_body','$date_added', NOW(), '$user','$posted_to','no','$getid')");
 	}
 	}
 	//post query
-	$query = mysql_query("SELECT id,added_by  FROM posts WHERE id='$getid'");
-	$query_row = mysql_fetch_assoc($query);
+	$query = mysqli_query("SELECT id,added_by  FROM posts WHERE id='$getid'");
+	$query_row = mysqli_fetch_assoc($query);
 	$posted_to = $query_row['added_by'];
 	//getting post by gender
-	$postby_query = mysql_query("SELECT * FROM users WHERE username='$posted_to'");
-	$postby_gender_row = mysql_fetch_assoc($postby_query);
+	$postby_query = mysqli_query("SELECT * FROM users WHERE username='$posted_to'");
+	$postby_gender_row = mysqli_fetch_assoc($postby_query);
 	$postby_gender_value = $postby_gender_row['gender'];
 	//getting user gender
-	$usergender_query = mysql_query("SELECT * FROM users WHERE username='$user'");
-	$user_gender_row = mysql_fetch_assoc($usergender_query);
+	$usergender_query = mysqli_query("SELECT * FROM users WHERE username='$user'");
+	$user_gender_row = mysqli_fetch_assoc($usergender_query);
 	$user_gender_value = $user_gender_row['gender'];
 	?>
 
@@ -105,8 +105,8 @@ if (isset($_REQUEST['id'])) {
 				</div>
 			";
 		}else {
-			$get_msg_num = mysql_query("SELECT * FROM pvt_messages WHERE user_from='$posted_to' AND user_to='$user' LIMIT 2");
-			$female_msg = mysql_num_rows($get_msg_num);
+			$get_msg_num = mysqli_query("SELECT * FROM pvt_messages WHERE user_from='$posted_to' AND user_to='$user' LIMIT 2");
+			$female_msg = mysqli_num_rows($get_msg_num);
 			if ($female_msg >=1 ) {
 				echo "
 					<div style='margin: 0 52px;'>
@@ -134,23 +134,23 @@ if (isset($_REQUEST['id'])) {
 
 	<?php
 	//Get relevant comments
-	$get_comments = mysql_query("SELECT * FROM post_comments WHERE post_id='$getid' ORDER BY id DESC LIMIT 3");
-	$count = mysql_num_rows($get_comments);
+	$get_comments = mysqli_query("SELECT * FROM post_comments WHERE post_id='$getid' ORDER BY id DESC LIMIT 3");
+	$count = mysqli_num_rows($get_comments);
 	if ($count != 0) {
-	while ($comment = mysql_fetch_assoc($get_comments)) {
+	while ($comment = mysqli_fetch_assoc($get_comments)) {
 		$comment_body = $comment['post_body'];
 		$date_added = $comment['date_added'];
 		$cmntPosted_to = $comment['posted_to'];
 		$post_by = $comment['posted_by'];
-		$get_user_info = mysql_query("SELECT * FROM users WHERE username='$post_by'");
-		$get_info = mysql_fetch_assoc($get_user_info);
+		$get_user_info = mysqli_query("SELECT * FROM users WHERE username='$post_by'");
+		$get_info = mysqli_fetch_assoc($get_user_info);
 		$profile_pic_db= $get_info['profile_pic'];
 		$posted_by = $get_info['first_name'];
 		
 		//check for propic delete
-						$pro_changed = mysql_query("SELECT * FROM posts WHERE added_by='$post_by' AND (discription='changed his profile picture.' OR discription='changed her profile picture.') ORDER BY id DESC LIMIT 1");
-						$get_pro_changed = mysql_fetch_assoc($pro_changed);
-		$pro_num = mysql_num_rows($pro_changed);
+						$pro_changed = mysqli_query("SELECT * FROM posts WHERE added_by='$post_by' AND (discription='changed his profile picture.' OR discription='changed her profile picture.') ORDER BY id DESC LIMIT 1");
+						$get_pro_changed = mysqli_fetch_assoc($pro_changed);
+		$pro_num = mysqli_num_rows($pro_changed);
 		if ($pro_num == 0) {
 			$profile_pic = "img/default_propic.png";
 		}else {

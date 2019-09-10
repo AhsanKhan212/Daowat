@@ -31,8 +31,8 @@ if ($user) {
 $error = "";
 $send = @$_POST['send'];
 //Update Bio and first name last name query
-$get_info = mysql_query("SELECT country,city,hometown FROM users WHERE username='$user'");
-$get_row = mysql_fetch_assoc($get_info);
+$get_info = mysqli_query("SELECT country,city,hometown FROM users WHERE username='$user'");
+$get_row = mysqli_fetch_assoc($get_info);
 $db_country = $get_row['country'];
 $db_city = $get_row['city'];
 $db_hometown = $get_row['hometown'];
@@ -43,16 +43,16 @@ if ($send) {
 	$country = strip_tags(@$_POST['country']);
 	$city = strip_tags(@$_POST['city']);
 	$city = trim($city);
-	$city = mysql_real_escape_string($city);
+	$city = mysqli_real_escape_string($city);
 	$city = ucwords($city);
 	$hometown = strip_tags(@$_POST['hometown']);
 	$hometown = trim($hometown);
-	$hometown = mysql_real_escape_string($hometown);
+	$hometown = mysqli_real_escape_string($hometown);
 	$hometown = ucwords($hometown);
 		//submit the form to database
-		$info_submit_query = mysql_query("UPDATE users SET city='$city' WHERE username='$user'");
-		$info_submit_query = mysql_query("UPDATE users SET country='$country' WHERE username='$user'");
-		$info_submit_query = mysql_query("UPDATE users SET hometown='$hometown' WHERE username='$user'");
+		$info_submit_query = mysqli_query("UPDATE users SET city='$city' WHERE username='$user'");
+		$info_submit_query = mysqli_query("UPDATE users SET country='$country' WHERE username='$user'");
+		$info_submit_query = mysqli_query("UPDATE users SET hometown='$hometown' WHERE username='$user'");
 		echo "<script>alert('Successfully Information Updated.')</script>";
 		echo "<script>window.open('location_update.php','_self')</script>";
 		$error = "<p class='succes_echo'>Information successfully changed.</p>";

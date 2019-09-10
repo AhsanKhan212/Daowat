@@ -12,15 +12,15 @@ else {
 if (isset($_REQUEST['did'])) {
 	$id = $_REQUEST['did'];
 	//delete from directory
-	$get_file = mysql_query("SELECT * FROM daowat WHERE id='$id'");
-	$get_file_name = mysql_fetch_assoc($get_file);
+	$get_file = mysqli_query("SELECT * FROM daowat WHERE id='$id'");
+	$get_file_name = mysqli_fetch_assoc($get_file);
 	$db_filename = $get_file_name['photos'];
 	$db_user_name = $get_file_name['added_by'];
 	if($db_user_name == $user) {
 		$delete_file = unlink("http://www.daowat.com/userdata/daowat_pics/".$db_filename);
 		//delete post
-		$result1 = mysql_query("DELETE FROM dwt_likes WHERE dwt_id='$id'");
-		$result = mysql_query("DELETE FROM daowat WHERE id='$id'");
+		$result1 = mysqli_query("DELETE FROM dwt_likes WHERE dwt_id='$id'");
+		$result = mysqli_query("DELETE FROM daowat WHERE id='$id'");
 		header("location: daowat.php?u=$user");
 	}else {
 		header("location: daowat.php?u=$user");

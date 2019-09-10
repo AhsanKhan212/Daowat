@@ -14,12 +14,12 @@ else {
 	$username ="";
 	$firstname ="";
 	if (isset($_GET['u'])) {
-		$username = mysql_real_escape_string($_GET['u']);
+		$username = mysqli_real_escape_string($_GET['u']);
 		if (ctype_alnum($username)) {
 			//check user exists
-			$check = mysql_query("SELECT username, first_name FROM users WHERE username='$username'");
-			if (mysql_num_rows($check)===1) {
-				$get = mysql_fetch_assoc($check);
+			$check = mysqli_query("SELECT username, first_name FROM users WHERE username='$username'");
+			if (mysqli_num_rows($check)===1) {
+				$get = mysqli_fetch_assoc($check);
 				$username = $get['username'];
 			}
 			else {
@@ -28,8 +28,8 @@ else {
 		}
 	}
 
-	$get_title_info = mysql_query("SELECT * FROM users WHERE username='$username'");
-	$get_title_fname = mysql_fetch_assoc($get_title_info);
+	$get_title_info = mysqli_query("SELECT * FROM users WHERE username='$username'");
+	$get_title_fname = mysqli_fetch_assoc($get_title_info);
 	$title_fname = $get_title_fname['first_name'];
 
 ?>
@@ -39,7 +39,7 @@ else {
 $error = "";
 $post = isset($_POST['post']) ? $_POST['post'] : '';
 $post =  trim($post);
-$post = mysql_real_escape_string($post);
+$post = mysqli_real_escape_string($post);
 $pic = @$_FILES['uploadFile'];
 if ($pic != "") {
 	if (isset($_FILES['uploadFile'])) {
@@ -76,7 +76,7 @@ if ($pic != "") {
 				$newsfeedshow = '0';
 			}
 			$sqlCommand = "INSERT INTO posts(body,date_added,added_by,user_posted_to,photos,newsfeedshow ) VALUES('$post', '$date_added','$added_by', '$user_posted_to', '$photos', '$newsfeedshow')";
-			$query = mysql_query($sqlCommand) or die (mysql_error());
+			$query = mysqli_query($sqlCommand) or die (mysqli_error());
 			header("Location: profile.php?u=$username");
 			}
 		}
@@ -143,8 +143,8 @@ if ($pic != "") {
 			<?php echo $error; ?>
 			<div style="max-width: 920px; margin: 0 auto;">
 				<?php 
-					$get_msg_num = mysql_query("SELECT * FROM pvt_messages WHERE user_from='$username' AND user_to='$user' LIMIT 2");
-					$msg_count = mysql_num_rows($get_msg_num);
+					$get_msg_num = mysqli_query("SELECT * FROM pvt_messages WHERE user_from='$username' AND user_to='$user' LIMIT 2");
+					$msg_count = mysqli_num_rows($get_msg_num);
 					if (($msg_count >=1 ) || ($username == $user)) {
 						echo '
 							<div class="p_postForm ">
@@ -170,8 +170,8 @@ if ($pic != "") {
 				<div style="">
 					<?php 
 
-						$getposts = mysql_query("SELECT * FROM posts WHERE user_posted_to ='$username' AND note='0' ORDER BY id DESC ") or die(mysql_error());
-						while ($row = mysql_fetch_assoc($getposts)) {
+						$getposts = mysqli_query("SELECT * FROM posts WHERE user_posted_to ='$username' AND note='0' ORDER BY id DESC ") or die(mysqli_error());
+						while ($row = mysqli_fetch_assoc($getposts)) {
 							$id = $row['id'];
 							$body = $row['body'];
 							$date_added = $row['date_added'];
@@ -179,8 +179,8 @@ if ($pic != "") {
 							$discription = $row['discription'];
 							$photos_db = $row['photos'];
 							$photos = "./userdata/profile_pics/".$photos_db;
-							$get_user_info = mysql_query("SELECT * FROM users WHERE username='$added_by'");
-							$get_info = mysql_fetch_assoc($get_user_info);
+							$get_user_info = mysqli_query("SELECT * FROM users WHERE username='$added_by'");
+							$get_info = mysqli_fetch_assoc($get_user_info);
 							$profilepic_info = $get_info['profile_pic'];
 					
 							if ($photos_db == "") {

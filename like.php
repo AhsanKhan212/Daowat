@@ -13,7 +13,7 @@ else {
 if (isset($_REQUEST['did'])) {
 	$dwt_id = $_REQUEST['did'];
 
-	$insertDwtlike = mysql_query("INSERT INTO dwt_likes VALUES ('','$user','$dwt_id')");
+	$insertDwtlike = mysqli_query("INSERT INTO dwt_likes VALUES ('','$user','$dwt_id')");
 	header("location: index.php");
 }else {
 	header('location: index.php');
@@ -23,7 +23,7 @@ if (isset($_REQUEST['did'])) {
 if (isset($_REQUEST['udid'])) {
 	$dwt_uid = $_REQUEST['udid'];
 
-	$del_dwtlike = mysql_query("DELETE FROM dwt_likes WHERE dwt_id='$dwt_uid'");
+	$del_dwtlike = mysqli_query("DELETE FROM dwt_likes WHERE dwt_id='$dwt_uid'");
 	header("location: index.php");
 }else {
 	header('location: index.php');
@@ -32,7 +32,7 @@ if (isset($_REQUEST['udid'])) {
 if (isset($_REQUEST['pid'])) {
 	$post_id = $_REQUEST['pid'];
 
-	$insertPostlike = mysql_query("INSERT INTO post_likes VALUES ('','$user','$post_id')");
+	$insertPostlike = mysqli_query("INSERT INTO post_likes VALUES ('','$user','$post_id')");
 	header("location: newsfeed.php");
 }else {
 	header('location: newsfeed.php');
@@ -42,7 +42,7 @@ if (isset($_REQUEST['pid'])) {
 if (isset($_REQUEST['upid'])) {
 	$post_uid = $_REQUEST['upid'];
 
-	$del_postlike = mysql_query("DELETE FROM post_likes WHERE post_id='$post_uid'");
+	$del_postlike = mysqli_query("DELETE FROM post_likes WHERE post_id='$post_uid'");
 	header("location: newsfeed.php");
 }else {
 	header('location: newsfeed.php');

@@ -12,15 +12,15 @@ else {
 if (isset($_REQUEST['pid'])) {
 	$id = $_REQUEST['pid'];
 	//delete from directory
-	$get_file = mysql_query("SELECT * FROM posts WHERE id='$id'");
-	$get_file_name = mysql_fetch_assoc($get_file);
+	$get_file = mysqli_query("SELECT * FROM posts WHERE id='$id'");
+	$get_file_name = mysqli_fetch_assoc($get_file);
 	$db_filename = $get_file_name['photos'];
 	$db_username = $get_file_name['added_by'];
 	if($db_username == $user) {
 		$delete_file = unlink("./userdata/profile_pics/".$db_filename);
 		//delete post
-		$result = mysql_query("DELETE FROM post_likes WHERE post_id='$id'");
-		$result = mysql_query("DELETE FROM posts WHERE id='$id'");
+		$result = mysqli_query("DELETE FROM post_likes WHERE post_id='$id'");
+		$result = mysqli_query("DELETE FROM posts WHERE id='$id'");
 		header("location: profile.php?u=$user");
 	}else {
 		header('location: index.php');

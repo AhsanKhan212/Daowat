@@ -36,8 +36,8 @@ $error = "";
 $updateinfo = @$_POST['updateinfo'];
 $update = @$_POST['update'];
 //Update Bio and first name last name query
-$get_info = mysql_query("SELECT first_name,nick_name FROM users WHERE username='$user'");
-$get_row = mysql_fetch_assoc($get_info);
+$get_info = mysqli_query("SELECT first_name,nick_name FROM users WHERE username='$user'");
+$get_row = mysqli_fetch_assoc($get_info);
 $db_firstname = $get_row['first_name'];
 $db_nickname = $get_row['nick_name'];
 
@@ -45,14 +45,14 @@ $db_nickname = $get_row['nick_name'];
 if ($updateinfo) {
 	$firstname = strip_tags(@$_POST['fname']);
 	$firstname = trim($firstname);
-	$firstname = mysql_real_escape_string($firstname);
+	$firstname = mysqli_real_escape_string($firstname);
 	$firstname = ucwords($firstname);
 
 	if(strlen($firstname) < 7 || strlen($firstname) > 20 )  {
 		$error = "<p class='error_echo'>Your Fullname must be 8-20 characters long.</p>";
 	}else {
 		//submit the form to database
-		$info_submit_query = mysql_query("UPDATE users SET first_name='$firstname' WHERE username='$user'");
+		$info_submit_query = mysqli_query("UPDATE users SET first_name='$firstname' WHERE username='$user'");
 		$error = "<p class='error_echo'>Your Profile Information Has Been Updated.</p>";
 		header("Location: $user");
 	}

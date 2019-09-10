@@ -72,23 +72,23 @@ if ($daowat_body != "") {
 if (isset($_POST['daowatComment' . $getid . ''])) {
 	$daowat_body = $_POST['daowat_body'];
 	$date_added = date("Y-m-d");
-	$query = mysql_query("SELECT id,added_by  FROM daowat WHERE id='$getid'");
-	$query_row = mysql_fetch_assoc($query);
+	$query = mysqli_query("SELECT id,added_by  FROM daowat WHERE id='$getid'");
+	$query_row = mysqli_fetch_assoc($query);
 	$daowat_to = $query_row['added_by'];
-	$insertPost = mysql_query("INSERT INTO daowat_comments VALUES ('','$daowat_body','$date_added',NOW(),'$user','$daowat_to','no','$getid')");
+	$insertPost = mysqli_query("INSERT INTO daowat_comments VALUES ('','$daowat_body','$date_added',NOW(),'$user','$daowat_to','no','$getid')");
 }
 }
 //post query
-	$query = mysql_query("SELECT id,added_by  FROM daowat WHERE id='$getid'");
-	$query_row = mysql_fetch_assoc($query);
+	$query = mysqli_query("SELECT id,added_by  FROM daowat WHERE id='$getid'");
+	$query_row = mysqli_fetch_assoc($query);
 	$daowat_to = $query_row['added_by'];
 	//getting post by gender
-	$dwtby_query = mysql_query("SELECT * FROM users WHERE username='$daowat_to'");
-	$dwtby_gender_row = mysql_fetch_assoc($dwtby_query);
+	$dwtby_query = mysqli_query("SELECT * FROM users WHERE username='$daowat_to'");
+	$dwtby_gender_row = mysqli_fetch_assoc($dwtby_query);
 	$dwtby_gender_value = $dwtby_gender_row['gender'];
 	//getting user gender
-	$usergender_query = mysql_query("SELECT * FROM users WHERE username='$user'");
-	$user_gender_row = mysql_fetch_assoc($usergender_query);
+	$usergender_query = mysqli_query("SELECT * FROM users WHERE username='$user'");
+	$user_gender_row = mysqli_fetch_assoc($usergender_query);
 	$user_gender_value = $user_gender_row['gender'];
 ?>
 
@@ -104,8 +104,8 @@ if (isset($_POST['daowatComment' . $getid . ''])) {
 			</div>
 		";
 	}else {
-		$get_msg_num = mysql_query("SELECT * FROM pvt_messages WHERE user_from='$daowat_to' AND user_to='$user' LIMIT 2");
-			$female_msg = mysql_num_rows($get_msg_num);
+		$get_msg_num = mysqli_query("SELECT * FROM pvt_messages WHERE user_from='$daowat_to' AND user_to='$user' LIMIT 2");
+			$female_msg = mysqli_num_rows($get_msg_num);
 			if ($female_msg >=1 ) {
 				echo "
 					<div style='margin: 0 52px;'>
@@ -134,25 +134,25 @@ if (isset($_POST['daowatComment' . $getid . ''])) {
 
 <?php
 //Get relevant daowat
-$get_comments = mysql_query("SELECT * FROM daowat_comments WHERE daowat_id='$getid' ORDER BY id DESC");
-$count = mysql_num_rows($get_comments);
+$get_comments = mysqli_query("SELECT * FROM daowat_comments WHERE daowat_id='$getid' ORDER BY id DESC");
+$count = mysqli_num_rows($get_comments);
 if ($count != 0) {
-while ($comment = mysql_fetch_assoc($get_comments)) {
+while ($comment = mysqli_fetch_assoc($get_comments)) {
 	$daowat_body = $comment['daowat_body'];
 	$date_added = $comment['date_added'];
 	$daowat_to = $comment['daowat_to'];
 	$dawat_by = $comment['daowat_by'];
-	$get_user_info = mysql_query("SELECT * FROM users WHERE username='$dawat_by'");
-	$get_info = mysql_fetch_assoc($get_user_info);
+	$get_user_info = mysqli_query("SELECT * FROM users WHERE username='$dawat_by'");
+	$get_info = mysqli_fetch_assoc($get_user_info);
 	$profile_pic_db= $get_info['profile_pic'];
 	$daowat_by = $get_info['first_name'];
-	$dwt_user_info = mysql_query("SELECT * FROM users WHERE username='$daowat_by'");
-	$fname_info = mysql_fetch_assoc($dwt_user_info);
+	$dwt_user_info = mysqli_query("SELECT * FROM users WHERE username='$daowat_by'");
+	$fname_info = mysqli_fetch_assoc($dwt_user_info);
 	
 	//check for propic delete
-						$pro_changed = mysql_query("SELECT * FROM posts WHERE added_by='$dawat_by' AND (discription='changed his profile picture.' OR discription='changed her profile picture.') ORDER BY id DESC LIMIT 1");
-						$get_pro_changed = mysql_fetch_assoc($pro_changed);
-		$pro_num = mysql_num_rows($pro_changed);
+						$pro_changed = mysqli_query("SELECT * FROM posts WHERE added_by='$dawat_by' AND (discription='changed his profile picture.' OR discription='changed her profile picture.') ORDER BY id DESC LIMIT 1");
+						$get_pro_changed = mysqli_fetch_assoc($pro_changed);
+		$pro_num = mysqli_num_rows($pro_changed);
 		if ($pro_num == 0) {
 			$profile_pic = "img/default_propic.png";
 		}else {

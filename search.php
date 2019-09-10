@@ -12,8 +12,8 @@ else {
 
 <?php  
 //getting user info
-$check_user = mysql_query("SELECT * FROM users WHERE username='$user'");
-$get_check_user_row = mysql_fetch_assoc($check_user );
+$check_user = mysqli_query("SELECT * FROM users WHERE username='$user'");
+$get_check_user_row = mysqli_fetch_assoc($check_user );
 $gender_user_db = $get_check_user_row ['gender'];
 ?>
 
@@ -67,8 +67,8 @@ $gender_user_db = $get_check_user_row ['gender'];
 				}else if ( $gender_user_db == '2') {
 				$query = "SELECT id,username,first_name,profile_pic,cover_pic,city,hometown,company,school,gender,verify_id FROM users where (username like '%$search_value%' OR first_name like '%$search_value%') AND (activated !='0')";
 				}
-				$query = mysql_query($query) or die ("could not count");
-				$count = mysql_num_rows($query);
+				$query = mysqli_query($query) or die ("could not count");
+				$count = mysqli_num_rows($query);
 			if ($count == 0){
 				echo '<div class="search_banner">No match found!
 				</div>';
@@ -79,7 +79,7 @@ $gender_user_db = $get_check_user_row ['gender'];
 					</div>
 					<div class="search_result_container">
 						';
-					while ($row=mysql_fetch_array($query)) {
+					while ($row=mysqli_fetch_array($query)) {
 						$id = $row['id'];
 						$username = $row['username'];
 						$first_name = $row['first_name'];
@@ -90,9 +90,9 @@ $gender_user_db = $get_check_user_row ['gender'];
 						$profile_pic_db = $row['profile_pic'];
 						$cover_pic_db = $row['cover_pic'];
 						//check for propic delete
-						$pro_changed = mysql_query("SELECT * FROM posts WHERE added_by='$username' AND (discription='changed his profile picture.' OR discription='changed her profile picture.') ORDER BY id DESC LIMIT 1");
-						$get_pro_changed = mysql_fetch_assoc($pro_changed);
-		$pro_num = mysql_num_rows($pro_changed);
+						$pro_changed = mysqli_query("SELECT * FROM posts WHERE added_by='$username' AND (discription='changed his profile picture.' OR discription='changed her profile picture.') ORDER BY id DESC LIMIT 1");
+						$get_pro_changed = mysqli_fetch_assoc($pro_changed);
+		$pro_num = mysqli_num_rows($pro_changed);
 		if ($pro_num == 0) {
 			$profile_pic = "img/default_propic.png";
 		}else {
@@ -104,9 +104,9 @@ $gender_user_db = $get_check_user_row ['gender'];
 		}
 		}
 						//check for cover delete
-						$pro_changed = mysql_query("SELECT * FROM posts WHERE added_by='$username' AND (discription='updated his cover photo.' OR discription='updated her cover photo.') ORDER BY id DESC LIMIT 1");
-						$get_pro_changed = mysql_fetch_assoc($pro_changed);
-		$pro_num = mysql_num_rows($pro_changed);
+						$pro_changed = mysqli_query("SELECT * FROM posts WHERE added_by='$username' AND (discription='updated his cover photo.' OR discription='updated her cover photo.') ORDER BY id DESC LIMIT 1");
+						$get_pro_changed = mysqli_fetch_assoc($pro_changed);
+		$pro_num = mysqli_num_rows($pro_changed);
 		if ($pro_num == 0) {
 			$cover_pic= "img/default_covpic.png";
 		}else {
@@ -201,8 +201,8 @@ $gender_user_db = $get_check_user_row ['gender'];
 
 				$search_for = $search_value;
 				$query = "SELECT id,body,date_added,added_by,photos,user_posted_to,discription FROM posts where  (body like '%$search_value%')  AND (note_privacy !='onlyme') ORDER BY id DESC";
-				$query = mysql_query($query) or die ("could not count");
-				$count = mysql_num_rows($query);
+				$query = mysqli_query($query) or die ("could not count");
+				$count = mysqli_num_rows($query);
 			if ($count == 0){
 				echo '<div class="search_banner">No match found!
 				</div>';
@@ -213,7 +213,7 @@ $gender_user_db = $get_check_user_row ['gender'];
 					</div>
 					<div class="search_result_container">
 						';
-					while ($row=mysql_fetch_array($query)) {
+					while ($row=mysqli_fetch_array($query)) {
 							include ( "./inc/getProfilepost.inc.php" );
 						}
 					}
@@ -229,8 +229,8 @@ $gender_user_db = $get_check_user_row ['gender'];
 			}else {
 				$search_for = $search_value;
 				$query = "SELECT id,body,date_added,added_by,photos FROM daowat where body like '%$search_value%' ORDER BY id DESC";
-				$query = mysql_query($query) or die ("could not count");
-				$count = mysql_num_rows($query);
+				$query = mysqli_query($query) or die ("could not count");
+				$count = mysqli_num_rows($query);
 			if ($count == 0){
 				echo '<div class="search_banner">No match found!
 				</div>';
@@ -241,7 +241,7 @@ $gender_user_db = $get_check_user_row ['gender'];
 					</div>
 					<div class="profilePosts search_result_container">
 						';
-					while ($row=mysql_fetch_array($query)) {
+					while ($row=mysqli_fetch_array($query)) {
 							include ( "./inc/getDaowatpost.inc.php" );
 						}
 					}

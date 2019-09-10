@@ -13,12 +13,12 @@ else {
 
 $username ="";
 if (isset($_GET['u'])) {
-	$username = mysql_real_escape_string($_GET['u']);
+	$username = mysqli_real_escape_string($_GET['u']);
 	if (ctype_alnum($username)) {
 		//check user exists
-		$check = mysql_query("SELECT username FROM users WHERE username='$username'");
-		if (mysql_num_rows($check)===1) {
-			$get = mysql_fetch_assoc($check);
+		$check = mysqli_query("SELECT username FROM users WHERE username='$username'");
+		if (mysqli_num_rows($check)===1) {
+			$get = mysqli_fetch_assoc($check);
 			$username = $get['username'];
 		}
 		else {
@@ -29,25 +29,25 @@ if (isset($_GET['u'])) {
 
 
 //update online tine
-$sql = mysql_query("UPDATE users SET chatOnlineTime=now() WHERE username='$user'");
+$sql = mysqli_query("UPDATE users SET chatOnlineTime=now() WHERE username='$user'");
 
 //chat count 
 $buddyList = '0';
-$getonlineuser = mysql_query("SELECT first_name,username FROM users WHERE (chatOnlineTime>=now()-300)") or die(mysql_error());
+$getonlineuser = mysqli_query("SELECT first_name,username FROM users WHERE (chatOnlineTime>=now()-300)") or die(mysqli_error());
 
-if (mysql_num_rows($getonlineuser) >= '2' ) {
-	while ($row = mysql_fetch_assoc($getonlineuser)) {
+if (mysqli_num_rows($getonlineuser) >= '2' ) {
+	while ($row = mysqli_fetch_assoc($getonlineuser)) {
 		$usrnm= $row['username'];
-		$check_if_friend = mysql_query("SELECT * FROM follow WHERE (user_from='$usrnm' AND user_to='$user') || (user_from='$user' AND user_to='$usrnm') ORDER BY id DESC LIMIT 2");
-		if(mysql_num_rows($check_if_friend) >= '2') {
+		$check_if_friend = mysqli_query("SELECT * FROM follow WHERE (user_from='$usrnm' AND user_to='$user') || (user_from='$user' AND user_to='$usrnm') ORDER BY id DESC LIMIT 2");
+		if(mysqli_num_rows($check_if_friend) >= '2') {
 		$buddyList++;
 		}
 	}
 }
 
 //getting user first message
-$get_first_message = mysql_query("SELECT * FROM pvt_messages WHERE user_to='$user' ORDER BY id DESC LIMIT 1");
-$first_message_row = mysql_fetch_assoc($get_first_message);
+$get_first_message = mysqli_query("SELECT * FROM pvt_messages WHERE user_to='$user' ORDER BY id DESC LIMIT 1");
+$first_message_row = mysqli_fetch_assoc($get_first_message);
 $first_message_id = $first_message_row['id'];
 $first_message_uname = $first_message_row['user_from'];
 
@@ -79,12 +79,12 @@ $first_message_uname = $first_message_row['user_from'];
 			<div>
 				<?php 
 				if (isset($_GET['u'])) {
-					$username = mysql_real_escape_string($_GET['u']);
+					$username = mysqli_real_escape_string($_GET['u']);
 					if (ctype_alnum($username)) {
 						//check user exists
-						$check = mysql_query("SELECT username, id,first_name FROM users WHERE username='$username'");
-						if (mysql_num_rows($check)===1) {
-							$get = mysql_fetch_assoc($check);
+						$check = mysqli_query("SELECT username, id,first_name FROM users WHERE username='$username'");
+						if (mysqli_num_rows($check)===1) {
+							$get = mysqli_fetch_assoc($check);
 							$username = $get['username'];
 							$fullname = $get['first_name'];
 							$getid = $get['id'];
@@ -93,7 +93,7 @@ $first_message_uname = $first_message_row['user_from'];
 								if (isset($_POST['submit'])) { 
 									$msg_body = ($_POST['msg_body']);
 									$msg_body = trim($msg_body);
-									$msg_body = mysql_real_escape_string($msg_body);
+									$msg_body = mysqli_real_escape_string($msg_body);
 									$date = date("Y-m-d");
 									$opened = "no";
 
@@ -102,7 +102,7 @@ $first_message_uname = $first_message_row['user_from'];
 									}else if (strlen($msg_body) < 2) {
 										echo "<div class='frndPok_errorecho' style='width: 504px; margin: 15px 0 0 0;'>Your message can not be less than 2 characters in length!</div></br>";
 									}else {
-									$messages = mysql_query("INSERT INTO pvt_messages VALUES ('','$user','$username','$msg_body','$date','','$opened','$getid')");
+									$messages = mysqli_query("INSERT INTO pvt_messages VALUES ('','$user','$username','$msg_body','$date','','$opened','$getid')");
 									echo "<div class='frndPok_succesecho' style='width: 416px; margin: 15px 0 0 0;'>Your message has been sent!</div></br>";
 									header("location: messages.php?u=$username");
 									}
@@ -112,16 +112,16 @@ $first_message_uname = $first_message_row['user_from'];
 								<form action='messages.php?u=$username' method='POST' >
 								<h2 style='font-size: 20px';>$fullname</h2><br />";
 								//gettting user gender
-								$get_user_gender = mysql_query("SELECT * FROM users WHERE username='$user'");
-								$gender_user_row = mysql_fetch_assoc($get_user_gender);
+								$get_user_gender = mysqli_query("SELECT * FROM users WHERE username='$user'");
+								$gender_user_row = mysqli_fetch_assoc($get_user_gender);
 								$user_gender_value = $gender_user_row['gender'];
 								//gettting username gender
-								$get_gender = mysql_query("SELECT * FROM users WHERE username='$username'");
-								$gender_row = mysql_fetch_assoc($get_gender);
+								$get_gender = mysqli_query("SELECT * FROM users WHERE username='$username'");
+								$gender_row = mysqli_fetch_assoc($get_gender);
 								$gender_value = $gender_row['gender'];
 								if ($gender_value == 2) {
-									$get_msg_num = mysql_query("SELECT * FROM pvt_messages WHERE user_from='$username' AND user_to='$user' LIMIT 2");
-									$female_msg = mysql_num_rows($get_msg_num);
+									$get_msg_num = mysqli_query("SELECT * FROM pvt_messages WHERE user_from='$username' AND user_to='$user' LIMIT 2");
+									$female_msg = mysqli_num_rows($get_msg_num);
 									if ($female_msg >=1 ) {
 										echo "<textarea style='width: 467px; height: 60px; padding: 2px 10px; background-color: #EAEAEA; resize: none;font-weight: bold;font-size: 13px;color: #484848;' name='msg_body' placeholder='Enter the message you wish to send...'></textarea><p /><br />
 										<input type='submit' name='submit' class='placeholder' value='Send Messege' style='float: right; margin-bottom: 10px;  cursor: pointer;'  /><br />
@@ -149,33 +149,33 @@ $first_message_uname = $first_message_row['user_from'];
 									<ul>
 										<li style='line-height: 8px;'>";
 								//getting conversation
-								$get_message = mysql_query("SELECT * FROM pvt_messages WHERE (user_from='$user' AND user_to='$username') OR (user_from='$username' AND user_to='$user') ORDER BY id DESC LIMIT 50");
-								$count = mysql_num_rows($get_message);
+								$get_message = mysqli_query("SELECT * FROM pvt_messages WHERE (user_from='$user' AND user_to='$username') OR (user_from='$username' AND user_to='$user') ORDER BY id DESC LIMIT 50");
+								$count = mysqli_num_rows($get_message);
 								//deleting msg
 								if ($count >= 51) {
-									$result = mysql_query("DELETE FROM pvt_messages WHERE (user_from='$user' AND user_to='$username') OR (user_from='$username' AND user_to='$user') ORDER BY id ASC LIMIT 1");
+									$result = mysqli_query("DELETE FROM pvt_messages WHERE (user_from='$user' AND user_to='$username') OR (user_from='$username' AND user_to='$user') ORDER BY id ASC LIMIT 1");
 								}
 								if ($count != 0) {
-								while ($msg = mysql_fetch_assoc($get_message)) {
+								while ($msg = mysqli_fetch_assoc($get_message)) {
 									$msg_id = $msg['id'];
 									$msg_body = $msg['msg_body'];
 									$date_added = $msg['date'];
 									$user_by = $msg['user_from'];
-									$get_user_info = mysql_query("SELECT * FROM users WHERE username='$user_by'");
-									$get_info = mysql_fetch_assoc($get_user_info);
+									$get_user_info = mysqli_query("SELECT * FROM users WHERE username='$user_by'");
+									$get_info = mysqli_fetch_assoc($get_user_info);
 									$profile_pic_db= $get_info['profile_pic'];
 									$posted_by = $get_info['first_name'];
 									//making emo
-									$emoticonQuery = mysql_query("SELECT * FROM emoticons");
-									while ($row = mysql_fetch_assoc($emoticonQuery)) {
+									$emoticonQuery = mysqli_query("SELECT * FROM emoticons");
+									while ($row = mysqli_fetch_assoc($emoticonQuery)) {
 										$chars = $row['chars'];
 										$photosTag = "<img style='width: 15px; height: 15px; margin: -3px 3px;' src='img/emo/".$row['photos']."'/>";
 										$msg_body = str_replace($chars, $photosTag, $msg_body);
 									}
 									//check for propic delete
-						$pro_changed = mysql_query("SELECT * FROM posts WHERE added_by='$user_by ' AND (discription='changed his profile picture.' OR discription='changed her profile picture.') ORDER BY id DESC LIMIT 1");
-						$get_pro_changed = mysql_fetch_assoc($pro_changed);
-		$pro_num = mysql_num_rows($pro_changed);
+						$pro_changed = mysqli_query("SELECT * FROM posts WHERE added_by='$user_by ' AND (discription='changed his profile picture.' OR discription='changed her profile picture.') ORDER BY id DESC LIMIT 1");
+						$get_pro_changed = mysqli_fetch_assoc($pro_changed);
+		$pro_num = mysqli_num_rows($pro_changed);
 		if ($pro_num == 0) {
 			$profile_pic = "img/default_propic.png";
 		}else {

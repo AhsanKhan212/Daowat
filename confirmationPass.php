@@ -14,9 +14,9 @@ if (($_GET['u'] && $_GET['code']) == NULL) {
 		}else if (($_GET['u'] || $_GET['code']) == NULL) {
 			header("location: passRecover.php");
 		}else if (($_GET['u'] && $_GET['code']) != NULL) {
-			$check_unameMail = mysql_query("SELECT * FROM users WHERE username='$unameMail' AND confirmCode!='0' AND confirmCode='$uCodeMail'");
-			$check_unameMail_num = mysql_num_rows($check_unameMail);
-			$usernmm_fetch_query = mysql_fetch_assoc($check_unameMail);
+			$check_unameMail = mysqli_query("SELECT * FROM users WHERE username='$unameMail' AND confirmCode!='0' AND confirmCode='$uCodeMail'");
+			$check_unameMail_num = mysqli_num_rows($check_unameMail);
+			$usernmm_fetch_query = mysqli_fetch_assoc($check_unameMail);
 			$get_first_nm_fetch_query = $usernmm_fetch_query['first_name'];
 			$get_unam_fetch_query = $usernmm_fetch_query['username'];
 			$get_email_fetch_query = $usernmm_fetch_query['email'];
@@ -36,14 +36,14 @@ if (($_GET['u'] && $_GET['code']) == NULL) {
 			}
 
 			$newpassword = strip_tags(@$_POST['newpassword']);
-			$newpassword = mysql_real_escape_string($newpassword);
+			$newpassword = mysqli_real_escape_string($newpassword);
 			$repear_password = strip_tags(@$_POST['newpassword2']);
-			$repear_password = mysql_real_escape_string($repear_password);
+			$repear_password = mysqli_real_escape_string($repear_password);
 			if (isset($_POST['confrmChangepass'])) {
 				if ($newpassword == $repear_password) {
 					$newpassword = md5($newpassword);
 					$updatePassQuery = "UPDATE users SET confirmCode='0', password='$newpassword' WHERE (username='$get_unam_fetch_query')";
-					if (mysql_query($updatePassQuery)) {
+					if (mysqli_query($updatePassQuery)) {
 						$error = "<p class='succes_echo'>Password successfully changed.</p>";
 						// send email
 						$msg = "Assalamu Alaikum  ".$get_first_nm_fetch_query."

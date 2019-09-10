@@ -13,12 +13,12 @@ else {
 	$username ="";
 	$firstname ="";
 	if (isset($_GET['u'])) {
-		$username = mysql_real_escape_string($_GET['u']);
+		$username = mysqli_real_escape_string($_GET['u']);
 		if (ctype_alnum($username)) {
 			//check user exists
-			$check = mysql_query("SELECT username, first_name FROM users WHERE username='$username'");
-			if (mysql_num_rows($check)===1) {
-				$get = mysql_fetch_assoc($check);
+			$check = mysqli_query("SELECT username, first_name FROM users WHERE username='$username'");
+			if (mysqli_num_rows($check)===1) {
+				$get = mysqli_fetch_assoc($check);
 				$username = $get['username'];
 				$firstname = $get['first_name'];
 			}
@@ -28,8 +28,8 @@ else {
 		}
 	}
 
-	$get_title_info = mysql_query("SELECT * FROM users WHERE username='$username'");
-	$get_title_fname = mysql_fetch_assoc($get_title_info);
+	$get_title_info = mysqli_query("SELECT * FROM users WHERE username='$username'");
+	$get_title_fname = mysqli_fetch_assoc($get_title_info);
 	$title_fname = $get_title_fname['first_name'];
 ?>
 <!DOCTYPE html>
@@ -44,8 +44,8 @@ else {
 
 	<?php 
 
-	$result = mysql_query("SELECT * FROM users WHERE username='$username'");
-	$num = mysql_num_rows($result);
+	$result = mysqli_query("SELECT * FROM users WHERE username='$username'");
+	$num = mysqli_num_rows($result);
 	if ($num == 1) {
 
 	include ( "./inc/header.inc.php");
@@ -72,31 +72,31 @@ else {
 			</div>
 		</div>
 	</div>';
-	$get_msg_num = mysql_query("SELECT * FROM pvt_messages WHERE user_from='$username' AND user_to='$user' LIMIT 2");
-	$msg_count = mysql_num_rows($get_msg_num);
+	$get_msg_num = mysqli_query("SELECT * FROM pvt_messages WHERE user_from='$username' AND user_to='$user' LIMIT 2");
+	$msg_count = mysqli_num_rows($get_msg_num);
 	if (($msg_count >=1 ) || ($username == $user)) {
 			$count = "";
 			$friends_num = 1;
 			$count_frnd_num = 0;
 				//count followers
 				$queryfollowers = "SELECT * FROM follow WHERE user_to='$username' ORDER BY id DESC";
-				$queryfollowers = mysql_query($queryfollowers ) or die ("could not count");
-				$countfollowers = mysql_num_rows($queryfollowers );
+				$queryfollowers = mysqli_query($queryfollowers ) or die ("could not count");
+				$countfollowers = mysqli_num_rows($queryfollowers );
 				//count following
 				$queryfollowing = "SELECT * FROM follow WHERE user_from='$username' ORDER BY id DESC";
-				$queryfollowing= mysql_query($queryfollowing) or die ("could not count");
-				$countfollowing = mysql_num_rows($queryfollowing);
+				$queryfollowing= mysqli_query($queryfollowing) or die ("could not count");
+				$countfollowing = mysqli_num_rows($queryfollowing);
 				
 				//getting all friend
 				$queryfollowing2 = "SELECT * FROM follow WHERE user_from='$username' ORDER BY id DESC";
-				$queryfollowing2= mysql_query($queryfollowing2) or die ("could not count");
-				while ($row=mysql_fetch_array($queryfollowing2)) {
+				$queryfollowing2= mysqli_query($queryfollowing2) or die ("could not count");
+				while ($row=mysqli_fetch_array($queryfollowing2)) {
 						$user_from = $row['user_from'];
 						$user_to = $row['user_to'];
 						//user to if friend 
 						
-						$if_user_to_follow = mysql_query("SELECT * FROM follow WHERE (user_from='$user_to' AND user_to='$user_from')");
-						$count_user_to_follow = mysql_num_rows($if_user_to_follow);
+						$if_user_to_follow = mysqli_query("SELECT * FROM follow WHERE (user_from='$user_to' AND user_to='$user_from')");
+						$count_user_to_follow = mysqli_num_rows($if_user_to_follow);
 						if ($count_user_to_follow != 0) {
 						  $count_frnd_num = $friends_num++;
 						}
@@ -117,12 +117,12 @@ else {
 					}else {
 					echo ' <div class="search_result_container">
 						';
-					while ($row=mysql_fetch_array($queryfollowers )) {
+					while ($row=mysqli_fetch_array($queryfollowers )) {
 						$user_from = $row['user_from'];
 						$user_to = $row['user_to'];
 						//spacif user profile
-						$family_query = mysql_query("SELECT id,username,first_name,profile_pic,cover_pic,city,hometown,company,school,gender,verify_id FROM users where username='$user_from' ORDER BY id DESC LIMIT 1");
-						$family_row = mysql_fetch_assoc($family_query) or die ("could not count");
+						$family_query = mysqli_query("SELECT id,username,first_name,profile_pic,cover_pic,city,hometown,company,school,gender,verify_id FROM users where username='$user_from' ORDER BY id DESC LIMIT 1");
+						$family_row = mysqli_fetch_assoc($family_query) or die ("could not count");
 						$id = $family_row['id'];
 						$username = $family_row['username'];
 						$first_name = $family_row['first_name'];
@@ -135,9 +135,9 @@ else {
 						$verify_id_user = $family_row['verify_id'];
 						
 						//check for userfrom propic delete
-						$pro_changed = mysql_query("SELECT * FROM posts WHERE added_by='$user_from' AND (discription='changed his profile picture.' OR discription='changed her profile picture.') ORDER BY id DESC LIMIT 1");
-						$get_pro_changed = mysql_fetch_assoc($pro_changed);
-		$pro_num = mysql_num_rows($pro_changed);
+						$pro_changed = mysqli_query("SELECT * FROM posts WHERE added_by='$user_from' AND (discription='changed his profile picture.' OR discription='changed her profile picture.') ORDER BY id DESC LIMIT 1");
+						$get_pro_changed = mysqli_fetch_assoc($pro_changed);
+		$pro_num = mysqli_num_rows($pro_changed);
 		if ($pro_num == 0) {
 			$profile_picuser_from = "img/default_propic.png";
 		}else {
@@ -150,13 +150,13 @@ else {
 		}
 						
 						//Check whether the user has uploaded a cover pic or not
-$check_pic = mysql_query("SELECT cover_pic FROM users WHERE username='$user'");
-$get_pic_row = mysql_fetch_assoc($check_pic);
+$check_pic = mysqli_query("SELECT cover_pic FROM users WHERE username='$user'");
+$get_pic_row = mysqli_fetch_assoc($check_pic);
 $cover_pic_db = $get_pic_row['cover_pic'];
 //check for userfrom propic delete
-						$pro_changed = mysql_query("SELECT * FROM posts WHERE added_by='$user_from' AND (discription='updated his cover photo.' OR discription='updated her cover photo.') ORDER BY id DESC LIMIT 1");
-						$get_pro_changed = mysql_fetch_assoc($pro_changed);
-		$pro_num = mysql_num_rows($pro_changed);
+						$pro_changed = mysqli_query("SELECT * FROM posts WHERE added_by='$user_from' AND (discription='updated his cover photo.' OR discription='updated her cover photo.') ORDER BY id DESC LIMIT 1");
+						$get_pro_changed = mysqli_fetch_assoc($pro_changed);
+		$pro_num = mysqli_num_rows($pro_changed);
 		if ($pro_num == 0) {
 			$cover_picuser_from= "img/default_covpic.png";
 		}else {
